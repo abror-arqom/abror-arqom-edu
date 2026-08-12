@@ -1,0 +1,681 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Game Edukasi Abror & Arqom</title>
+    <style>
+        :root {
+            --red: #FF2A6D;
+            --orange: #FF70A6;
+            --yellow: #FFD166;
+            --green: #06D6A0;
+            --blue: #118AB2;
+            --purple: #8338EC;
+            --dark: #073B4C;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            user-select: none;
+        }
+
+        body {
+            background-color: var(--dark);
+            color: white;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 15px;
+        }
+
+        /* Lumia Header */
+        header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        h1 {
+            font-size: 2.2rem;
+            font-weight: 900;
+            letter-spacing: 1px;
+            color: var(--yellow);
+            text-shadow: 3px 3px 0px var(--red);
+            margin-bottom: 5px;
+        }
+
+        p.subtitle {
+            font-size: 1rem;
+            color: #E0E0E0;
+        }
+
+        /* Lumia Grid Nav */
+        .menu-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+            gap: 12px;
+            width: 100%;
+            max-width: 800px;
+            margin-bottom: 20px;
+        }
+
+        .tile {
+            background-color: var(--blue);
+            padding: 15px 10px;
+            border-radius: 12px;
+            text-align: center;
+            cursor: pointer;
+            transition: transform 0.2s, filter 0.2s;
+            box-shadow: 0 5px 0px rgba(0,0,0,0.2);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100px;
+        }
+
+        .tile:active {
+            transform: translateY(4px);
+            box-shadow: none;
+        }
+
+        .tile i {
+            font-size: 2.2rem;
+            margin-bottom: 5px;
+        }
+
+        .tile span {
+            font-size: 0.95rem;
+            font-weight: bold;
+        }
+
+        /* Tile Color Schemes */
+        .tile-red { background-color: #E74C3C; }
+        .tile-orange { background-color: #E67E22; }
+        .tile-yellow { background-color: #F1C40F; color: #2C3E50; }
+        .tile-green { background-color: #2ECC71; }
+        .tile-blue { background-color: #3498DB; }
+        .tile-purple { background-color: #9B59B6; }
+
+        /* Game Area Box */
+        .game-container {
+            background: white;
+            color: #333;
+            width: 100%;
+            max-width: 800px;
+            border-radius: 20px;
+            padding: 20px;
+            min-height: 380px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .game-screen {
+            display: none;
+            width: 100%;
+            text-align: center;
+            animation: fadeIn 0.4s ease-in-out;
+        }
+
+        .game-screen.active {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.95); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        /* Button & Interactive Items */
+        .btn {
+            background-color: var(--blue);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 4px 0px rgba(0,0,0,0.2);
+            margin: 8px;
+            transition: background 0.2s;
+        }
+
+        .btn:hover { filter: brightness(1.1); }
+        .btn:active { transform: translateY(2px); box-shadow: none; }
+        .btn-green { background-color: #2ECC71; }
+        .btn-orange { background-color: #E67E22; }
+
+        /* Grid for Choices/Cards */
+        .grid-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+            gap: 12px;
+            width: 100%;
+            margin-top: 15px;
+        }
+
+        .card-item {
+            background: #F8F9FA;
+            border: 3px solid #E2E8F0;
+            border-radius: 15px;
+            padding: 15px 5px;
+            font-size: 2rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        }
+
+        .card-item:hover {
+            border-color: var(--blue);
+            transform: scale(1.05);
+            background: #EBF8FF;
+        }
+
+        .card-item:active { transform: scale(0.95); }
+
+        /* Vehicle Guess Styling */
+        .vehicle-display {
+            font-size: 6rem;
+            margin: 15px 0;
+            filter: drop-shadow(2px 4px 6px rgba(0,0,0,0.15));
+        }
+
+        /* Puzzle Game Styling */
+        .puzzle-box {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            width: 100%;
+            gap: 15px;
+            margin-top: 15px;
+            flex-wrap: wrap;
+        }
+
+        .puzzle-shadow, .puzzle-piece {
+            width: 110px;
+            height: 110px;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3.5rem;
+        }
+
+        .puzzle-shadow {
+            background: #E2E8F0;
+            border: 3px dashed #CBD5E0;
+            filter: brightness(0.2) opacity(0.3);
+        }
+
+        .puzzle-piece {
+            background: #FFF;
+            border: 3px solid #3498DB;
+            cursor: grab;
+            box-shadow: 0 5px 10px rgba(0,0,0,0.1);
+        }
+
+        /* Brain Teaser Memory Cards */
+        .memory-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            max-width: 400px;
+            margin-top: 10px;
+        }
+
+        .mem-card {
+            width: 75px;
+            height: 75px;
+            background: var(--blue);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            cursor: pointer;
+            color: white;
+            box-shadow: 0 4px 0 rgba(0,0,0,0.15);
+        }
+
+        .mem-card.flipped {
+            background: white;
+            border: 2px solid var(--blue);
+            color: #333;
+        }
+
+        .score-badge {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            background: var(--yellow);
+            color: #333;
+            font-weight: bold;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+        }
+
+        .speech-bubble {
+            background: #EDF2F7;
+            padding: 10px 20px;
+            border-radius: 20px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            color: var(--dark);
+            margin-bottom: 15px;
+            border: 2px solid #CBD5E0;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>ABROR & ARQOM</h1>
+        <p class="subtitle">Game Challenge Edukasi Anak TK - UI Lumia</p>
+    </header>
+
+    <!-- Menu Navigasi UI Lumia Metro -->
+    <div class="menu-grid">
+        <div class="tile tile-red" onclick="switchGame('kendaraan')">
+            <i>🚗</i>
+            <span>Tebak Kendaraan</span>
+        </div>
+        <div class="tile tile-orange" onclick="switchGame('puzzle')">
+            <i>🧩</i>
+            <span>Puzzle Shape</span>
+        </div>
+        <div class="tile tile-yellow" onclick="switchGame('hijaiyah')">
+            <i>🌙</i>
+            <span>Huruf Hijaiyyah</span>
+        </div>
+        <div class="tile tile-green" onclick="switchGame('angka')">
+            <i>🔢</i>
+            <span>Angka 1-10</span>
+        </div>
+        <div class="tile tile-blue" onclick="switchGame('alphabet')">
+            <i>🔤</i>
+            <span>Alphabet A-Z</span>
+        </div>
+        <div class="tile tile-purple" onclick="switchGame('asahOtak')">
+            <i>🧠</i>
+            <span>Asah Otak</span>
+        </div>
+    </div>
+
+    <!-- Area Permainan Utamna -->
+    <div class="game-container">
+        <div class="score-badge" id="scoreDisplay">Bintang: ⭐ 0</div>
+
+        <!-- 0. Welcome Screen -->
+        <div id="screen-welcome" class="game-screen active">
+            <h2 style="color: var(--blue); margin-bottom: 10px;">Pilih Permainan di Atas!</h2>
+            <p style="margin-bottom: 20px;">Halo Abror & Arqom, mari belajar sambil bermain bersama!</p>
+            <button class="btn btn-green" onclick="speakText('Selamat datang di game challenge Abror dan Arqom! Mari kita main!')">🔊 Sapaan Abror & Arqom</button>
+        </div>
+
+        <!-- 1. Tebak Gambar Kendaraan -->
+        <div id="screen-kendaraan" class="game-screen">
+            <div class="speech-bubble" id="vehiclePrompt">Apa nama kendaraan ini?</div>
+            <div class="vehicle-display" id="vehicleEmoji">🚒</div>
+            <div class="grid-cards" id="vehicleOptions" style="grid-template-columns: repeat(2, 1fr);"></div>
+        </div>
+
+        <!-- 2. Puzzle Bentuk Kendaraan -->
+        <div id="screen-puzzle" class="game-screen">
+            <div class="speech-bubble">Cocokkan kendaraan dengan bayangannya!</div>
+            <div class="puzzle-box">
+                <div id="puzzleTarget" class="puzzle-shadow">✈️</div>
+                <div class="grid-cards" id="puzzlePieces" style="max-width: 300px;"></div>
+            </div>
+        </div>
+
+        <!-- 3. Hijaiyyah -->
+        <div id="screen-hijaiyah" class="game-screen">
+            <div class="speech-bubble" id="hijaiyahPrompt">Dengarkan dan Tebak Huruf!</div>
+            <button class="btn btn-orange" onclick="repeatHijaiyahAudio()">🔊 Ulangi Suara Soal</button>
+            <div class="grid-cards" id="hijaiyahGrid" style="grid-template-columns: repeat(4, 1fr);"></div>
+        </div>
+
+        <!-- 4. Angka -->
+        <div id="screen-angka" class="game-screen">
+            <div class="speech-bubble" id="angkaPrompt">Pilih Angka Sesuai Suara!</div>
+            <button class="btn btn-orange" onclick="repeatAngkaAudio()">🔊 Ulangi Suara Soal</button>
+            <div class="grid-cards" id="angkaGrid" style="grid-template-columns: repeat(5, 1fr);"></div>
+        </div>
+
+        <!-- 5. Alphabet -->
+        <div id="screen-alphabet" class="game-screen">
+            <div class="speech-bubble">Sentuh Huruf Untuk Mendengar Suara!</div>
+            <div class="grid-cards" id="alphabetGrid" style="grid-template-columns: repeat(6, 1fr); max-height: 250px; overflow-y: auto;"></div>
+        </div>
+
+        <!-- 6. Asah Otak (Memory Match) -->
+        <div id="screen-asahOtak" class="game-screen">
+            <div class="speech-bubble">Temukan Pasangan Gambar yang Sama!</div>
+            <div class="memory-grid" id="memoryGrid"></div>
+        </div>
+    </div>
+
+    <script>
+        // Data & Variables
+        let score = 0;
+        let currentTargetHijaiyah = '';
+        let currentTargetAngka = 0;
+        let currentVehicleAnswer = '';
+        let currentPuzzleAnswer = '';
+
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+        // Sound Synthesis (SFX)
+        function playTone(freq, type, duration) {
+            try {
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.type = type;
+                osc.frequency.value = freq;
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                osc.start();
+                gain.gain.exponentialRampToValueAtTime(0.00001, audioCtx.currentTime + duration);
+                osc.stop(audioCtx.currentTime + duration);
+            } catch(e){}
+        }
+
+        function playCorrectSFX() {
+            playTone(523.25, 'triangle', 0.15); // C5
+            setTimeout(() => playTone(659.25, 'triangle', 0.2), 150); // E5
+            setTimeout(() => playTone(783.99, 'triangle', 0.3), 300); // G5
+        }
+
+        function playWrongSFX() {
+            playTone(220, 'sawtooth', 0.2);
+            setTimeout(() => playTone(180, 'sawtooth', 0.3), 200);
+        }
+
+        // Voice Engine (Web Speech API)
+        function speakText(text) {
+            if ('speechSynthesis' in window) {
+                window.speechSynthesis.cancel(); // Stop previous
+                const utterance = new SpeechSynthesisUtterance(text);
+                utterance.lang = 'id-ID';
+                utterance.rate = 0.9; // Agak perlahan untuk anak TK
+                utterance.pitch = 1.2; // Suara ceria
+                window.speechSynthesis.speak(utterance);
+            }
+        }
+
+        function givePraise() {
+            const praises = [
+                "Kamu hebat!",
+                "Abror hebat!",
+                "Arqom hebat!",
+                "Pintar sekali!",
+                "Luar biasa!",
+                "Selamat, jawaban kamu benar!"
+            ];
+            const randomPraise = praises[Math.floor(Math.random() * praises.length)];
+            score += 10;
+            document.getElementById('scoreDisplay').innerText = `Bintang: ⭐ ${score}`;
+            playCorrectSFX();
+            speakText(randomPraise);
+        }
+
+        function giveTryAgain() {
+            playWrongSFX();
+            speakText("Ayo coba lagi ya!");
+        }
+
+        // Screen Switcher
+        function switchGame(gameName) {
+            document.querySelectorAll('.game-screen').forEach(s => s.classList.remove('active'));
+            document.getElementById(`screen-${gameName}`).classList.add('active');
+
+            if (gameName === 'kendaraan') initVehicleGame();
+            if (gameName === 'puzzle') initPuzzleGame();
+            if (gameName === 'hijaiyah') initHijaiyahGame();
+            if (gameName === 'angka') initAngkaGame();
+            if (gameName === 'alphabet') initAlphabetGame();
+            if (gameName === 'asahOtak') initMemoryGame();
+        }
+
+        // 1. TEBAK KENDARAAN
+        const vehicles = [
+            { name: "Mobil", emoji: "🚗" },
+            { name: "Motor", emoji: "🏍️" },
+            { name: "Pesawat", emoji: "✈️" },
+            { name: "Kapal Laut", emoji: "🚢" },
+            { name: "Kereta Api", emoji: "🚂" },
+            { name: "Helikopte", emoji: "🚁" },
+            { name: "Pemadam", emoji: "🚒" },
+            { name: "Ambulans", emoji: "🚑" }
+        ];
+
+        function initVehicleGame() {
+            const current = vehicles[Math.floor(Math.random() * vehicles.length)];
+            currentVehicleAnswer = current.name;
+
+            document.getElementById('vehicleEmoji').innerText = current.emoji;
+            speakText("Coba tebak, apa nama kendaraan ini?");
+
+            // Generate Options
+            let options = [current.name];
+            while(options.length < 4) {
+                let r = vehicles[Math.floor(Math.random() * vehicles.length)].name;
+                if(!options.includes(r)) options.push(r);
+            }
+            options.sort(() => Math.random() - 0.5);
+
+            const container = document.getElementById('vehicleOptions');
+            container.innerHTML = '';
+            options.forEach(opt => {
+                const btn = document.createElement('div');
+                btn.className = 'card-item';
+                btn.innerText = opt;
+                btn.onclick = () => {
+                    if (opt === currentVehicleAnswer) {
+                        givePraise();
+                        setTimeout(initVehicleGame, 1500);
+                    } else {
+                        giveTryAgain();
+                    }
+                };
+                container.appendChild(btn);
+            });
+        }
+
+        // 2. PUZZLE BENTUK KENDARAAN
+        function initPuzzleGame() {
+            const shuffled = [...vehicles].sort(() => Math.random() - 0.5);
+            const target = shuffled[0];
+            currentPuzzleAnswer = target.emoji;
+
+            document.getElementById('puzzleTarget').innerText = target.emoji;
+            speakText("Cari bentuk kendaraan yang sama!");
+
+            const pieces = shuffled.slice(0, 3);
+            pieces.sort(() => Math.random() - 0.5);
+
+            const container = document.getElementById('puzzlePieces');
+            container.innerHTML = '';
+            pieces.forEach(p => {
+                const card = document.createElement('div');
+                card.className = 'card-item';
+                card.innerText = p.emoji;
+                card.onclick = () => {
+                    if (p.emoji === currentPuzzleAnswer) {
+                        givePraise();
+                        setTimeout(initPuzzleGame, 1500);
+                    } else {
+                        giveTryAgain();
+                    }
+                };
+                container.appendChild(card);
+            });
+        }
+
+        // 3. HIJAIYYAH
+        const hijaiyahData = [
+            { char: "أ", name: "Alif" },
+            { char: "ب", name: "Ba" },
+            { char: "ت", name: "Ta" },
+            { char: "ث", name: "Tsa" },
+            { char: "ج", name: "Jim" },
+            { char: "ح", name: "Ha" },
+            { char: "خ", name: "Kho" },
+            { char: "د", name: "Dal" }
+        ];
+
+        function initHijaiyahGame() {
+            const target = hijaiyahData[Math.floor(Math.random() * hijaiyahData.length)];
+            currentTargetHijaiyah = target;
+
+            document.getElementById('hijaiyahPrompt').innerText = `Coba mana huruf ${target.name}?`;
+            repeatHijaiyahAudio();
+
+            const container = document.getElementById('hijaiyahGrid');
+            container.innerHTML = '';
+            hijaiyahData.forEach(item => {
+                const card = document.createElement('div');
+                card.className = 'card-item';
+                card.innerText = item.char;
+                card.onclick = () => {
+                    speakText(item.name);
+                    if (item.name === currentTargetHijaiyah.name) {
+                        givePraise();
+                        setTimeout(initHijaiyahGame, 1800);
+                    } else {
+                        giveTryAgain();
+                    }
+                };
+                container.appendChild(card);
+            });
+        }
+
+        function repeatHijaiyahAudio() {
+            speakText(`Coba mana huruf ${currentTargetHijaiyah.name}?`);
+        }
+
+        // 4. ANGKA 1-10
+        function initAngkaGame() {
+            currentTargetAngka = Math.floor(Math.random() * 10) + 1;
+            document.getElementById('angkaPrompt').innerText = `Pilih Angka ${currentTargetAngka}!`;
+            repeatAngkaAudio();
+
+            const container = document.getElementById('angkaGrid');
+            container.innerHTML = '';
+            for(let i=1; i<=10; i++) {
+                const card = document.createElement('div');
+                card.className = 'card-item';
+                card.innerText = i;
+                card.onclick = () => {
+                    speakText(i.toString());
+                    if (i === currentTargetAngka) {
+                        givePraise();
+                        setTimeout(initAngkaGame, 1500);
+                    } else {
+                        giveTryAgain();
+                    }
+                };
+                container.appendChild(card);
+            }
+        }
+
+        function repeatAngkaAudio() {
+            speakText(`Coba pilih angka ${currentTargetAngka}!`);
+        }
+
+        // 5. ALPHABET A-Z
+        function initAlphabetGame() {
+            const container = document.getElementById('alphabetGrid');
+            container.innerHTML = '';
+            for (let i = 65; i <= 90; i++) {
+                const char = String.fromCharCode(i);
+                const card = document.createElement('div');
+                card.className = 'card-item';
+                card.style.fontSize = '1.5rem';
+                card.innerText = char;
+                card.onclick = () => speakText(`Huruf ${char}`);
+                container.appendChild(card);
+            }
+        }
+
+        // 6. ASAH OTAK (MEMORY MATCH)
+        const memoryIcons = ['🚗', '✈️', '🍎', '🐱', '🚗', '✈️', '🍎', '🐱'];
+        let flippedCards = [];
+        let matchedPairs = 0;
+
+        function initMemoryGame() {
+            matchedPairs = 0;
+            flippedCards = [];
+            const shuffled = [...memoryIcons].sort(() => Math.random() - 0.5);
+            const container = document.getElementById('memoryGrid');
+            container.innerHTML = '';
+
+            shuffled.forEach((icon, index) => {
+                const card = document.createElement('div');
+                card.className = 'mem-card';
+                card.dataset.icon = icon;
+                card.dataset.index = index;
+                card.innerText = '❓';
+                card.onclick = () => handleMemoryClick(card);
+                container.appendChild(card);
+            });
+            speakText("Temukan dua gambar yang sama!");
+        }
+
+        function handleMemoryClick(card) {
+            if (flippedCards.length < 2 && !card.classList.contains('flipped')) {
+                card.classList.add('flipped');
+                card.innerText = card.dataset.icon;
+                flippedCards.push(card);
+
+                if (flippedCards.length === 2) {
+                    if (flippedCards[0].dataset.icon === flippedCards[1].dataset.icon) {
+                        matchedPairs++;
+                        givePraise();
+                        flippedCards = [];
+                        if (matchedPairs === 4) {
+                            setTimeout(() => {
+                                speakText("Selamat, Abror dan Arqom menyelesaikan permainan asah otak!");
+                                initMemoryGame();
+                            }, 1500);
+                        }
+                    } else {
+                        playWrongSFX();
+                        setTimeout(() => {
+                            flippedCards.forEach(c => {
+                                c.classList.remove('flipped');
+                                c.innerText = '❓';
+                            });
+                            flippedCards = [];
+                        }, 1000);
+                    }
+                }
+            }
+        }
+
+        // Sapaan Awal Otomatis saat pertama dibuka
+        window.onload = () => {
+            setTimeout(() => {
+                speakText("Selamat datang di game challenge Abror dan Arqom!");
+            }, 800);
+        };
+    </script>
+</body>
+</html>
