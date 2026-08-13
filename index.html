@@ -4,20 +4,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Game Edukasi Abror & Arqom</title>
-    <!-- Import Font Elegan & Modern Sesuai Gambar -->
+    <!-- Import Font Google Elegan, Playful & Modern -->
     <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,700;1,700&family=Fredoka:wght@600;700;800;900&family=Plus+Jakarta+Sans:wght@700;800;900&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-dark: #061A14;
-            --card-emerald: #0E3B30;
-            --card-emerald-light: #155042;
-            --border-emerald: #1F7A65;
-            --accent-cyan: #2DD4BF;
-            --accent-blue: #2563EB;
-            --accent-purple: #8B5CF6;
-            --accent-orange: #F97316;
-            --accent-yellow: #FACC15;
-            --text-light: #F1F5F9;
+            --lumia-red: #FF4757;
+            --lumia-orange: #FF7F50;
+            --lumia-yellow: #FFA502;
+            --lumia-green: #2ED573;
+            --lumia-blue: #1E90FF;
+            --lumia-purple: #8E44AD;
+            --lumia-dark: #0F172A;
+            --lumia-card-bg: rgba(255, 255, 255, 0.96);
         }
 
         * {
@@ -29,159 +27,143 @@
         }
 
         body {
-            background-color: var(--bg-dark);
-            background-image: radial-gradient(rgba(45, 212, 191, 0.05) 2px, transparent 2px);
-            background-size: 28px 28px;
-            color: var(--text-light);
+            background-color: var(--lumia-dark);
+            /* Motif halus dot transparan */
+            background-image: radial-gradient(rgba(255, 255, 255, 0.08) 2px, transparent 2px);
+            background-size: 24px 24px;
+            color: white;
             min-height: 100vh;
             display: flex;
             flex-direction: column;
             align-items: center;
-            padding: 20px 15px;
+            padding: 25px 15px;
         }
 
-        /* HEADER JUDUL PERSIS STYLE GAMBAR */
-        header.top-banner {
-            background: linear-gradient(135deg, #0A3329, #092C23);
-            border: 2px solid var(--border-emerald);
-            border-radius: 20px;
-            width: 100%;
-            max-width: 900px;
-            padding: 16px 24px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 18px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.4);
-            flex-wrap: wrap;
-            gap: 12px;
+        header {
+            text-align: center;
+            margin-bottom: 25px;
         }
 
-        .header-left {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-
-        .header-icon {
-            width: 54px;
-            height: 54px;
-            background: #FFFFFF;
-            border-radius: 16px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 2.2rem;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-        }
-
-        .header-title-box h1 {
+        /* FONT JUDUL BARU - TEBAL, MEMBULAT & KEREN */
+        h1 {
             font-family: 'Fredoka', sans-serif;
-            font-size: 2rem;
+            font-size: 2.8rem;
             font-weight: 900;
-            color: #FFFFFF;
-            letter-spacing: 0.5px;
+            background: linear-gradient(180deg, #FFE17D 0%, #FFB703 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            filter: drop-shadow(0px 4px 10px rgba(255, 183, 3, 0.3));
             line-height: 1.1;
         }
 
-        .header-title-box p {
-            font-size: 0.9rem;
+        p.subtitle {
+            font-size: 1rem;
             color: #94A3B8;
             font-weight: 700;
-            margin-top: 3px;
+            margin-top: 6px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
         }
 
-        .score-pill {
-            background: var(--accent-yellow);
-            color: #0F172A;
-            font-size: 1.15rem;
-            font-weight: 900;
-            padding: 10px 22px;
-            border-radius: 50px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            box-shadow: 0 4px 12px rgba(250, 204, 21, 0.3);
-        }
-
-        /* MENU UTAMA TOP CAPSULES BAR (PERSIS ATAS GAMBAR) */
-        .menu-bar-scroll {
-            width: 100%;
-            max-width: 900px;
-            overflow-x: auto;
-            white-space: nowrap;
-            padding-bottom: 8px;
-            margin-bottom: 20px;
-            scrollbar-width: thin;
-        }
-
+        /* MENU METRO TILES - DIPERBARUI DENGAN WARNA & EFEK DINGIN/GLOW KEREN */
         .menu-grid {
-            display: inline-flex;
-            gap: 10px;
-            background: rgba(10, 40, 32, 0.7);
-            padding: 10px;
-            border-radius: 20px;
-            border: 1px solid var(--border-emerald);
-        }
-
-        .nav-pill {
-            background: rgba(15, 60, 48, 0.8);
-            border: 1.5px solid var(--border-emerald);
-            color: #E2E8F0;
-            padding: 10px 18px;
-            border-radius: 50px;
-            font-size: 0.88rem;
-            font-weight: 800;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .nav-pill:hover {
-            border-color: var(--accent-cyan);
-            color: #FFF;
-            transform: translateY(-2px);
-        }
-
-        .nav-pill.active {
-            background: linear-gradient(135deg, #0284C7, #0369A1);
-            border-color: #38BDF8;
-            color: #FFFFFF;
-            box-shadow: 0 0 15px rgba(56, 189, 248, 0.4);
-        }
-
-        /* CONTAINER GAME UTAMA SEPERTI CARD TERBAGI GAMBAR */
-        .main-workspace {
-            display: flex;
-            gap: 20px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+            gap: 16px;
             width: 100%;
-            max-width: 900px;
-            flex-wrap: wrap;
+            max-width: 880px;
+            margin-bottom: 25px;
         }
 
-        .game-card-panel {
-            background: var(--card-emerald);
-            border: 2px solid var(--border-emerald);
-            border-radius: 24px;
-            padding: 25px;
-            flex: 1;
-            min-width: 320px;
-            min-height: 480px;
+        .tile {
+            padding: 18px 10px;
+            border-radius: 22px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.3);
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.5);
+            min-height: 115px;
+            border: 2px solid rgba(255, 255, 255, 0.2);
             position: relative;
+            overflow: hidden;
+        }
+
+        /* Efek Kilau / Highlight Halus di Atas Card Menu */
+        .tile::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; height: 40%;
+            background: linear-gradient(180deg, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0) 100%);
+            pointer-events: none;
+        }
+
+        .tile:hover {
+            transform: translateY(-6px) scale(1.02);
+            box-shadow: 0 14px 28px rgba(0,0,0,0.4);
+            border-color: #FFFFFF;
+        }
+
+        .tile:active {
+            transform: translateY(2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+
+        .tile i {
+            font-size: 2.6rem;
+            margin-bottom: 6px;
+            font-style: normal;
+            filter: drop-shadow(0px 4px 6px rgba(0,0,0,0.25));
+        }
+
+        .tile span {
+            font-size: 0.95rem;
+            font-weight: 800;
+            line-height: 1.2;
+            color: #FFFFFF;
+            letter-spacing: 0.3px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+
+        /* SKEMA WARNA MENU BARU LEBIH TAJAM & KEREN */
+        .tile-red    { background: linear-gradient(135deg, #FF3366, #E81123); border-color: #FF708F; }
+        .tile-orange { background: linear-gradient(135deg, #FF6B00, #D95300); border-color: #FF9E59; }
+        .tile-yellow { background: linear-gradient(135deg, #FFB800, #E69500); border-color: #FFE082; }
+        .tile-green  { background: linear-gradient(135deg, #10B981, #059669); border-color: #6EE7B7; }
+        .tile-blue   { background: linear-gradient(135deg, #0078D4, #005A9E); border-color: #60A5FA; }
+        .tile-purple { background: linear-gradient(135deg, #8B5CF6, #6D28D9); border-color: #C4B5FD; }
+
+        /* WADAH PERMAINAN (TETAP SESUAI DESAIN LAMA) */
+        .game-container {
+            background-color: var(--lumia-card-bg);
+            background-image: radial-gradient(#CBD5E1 2px, transparent 2px);
+            background-size: 22px 22px;
+            color: #1E293B;
+            width: 100%;
+            max-width: 880px;
+            border-radius: 28px;
+            padding: 30px 24px;
+            min-height: 490px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+            border: 4px solid rgba(255, 255, 255, 0.8);
         }
 
         .game-screen {
             display: none;
             width: 100%;
             text-align: center;
-            animation: fadeIn 0.3s ease-in-out;
+            animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
         .game-screen.active {
@@ -190,47 +172,39 @@
             align-items: center;
         }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(6px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .speech-bubble {
-            background: #111827;
-            border: 2px solid #374151;
-            padding: 14px 22px;
-            border-radius: 18px;
-            font-size: 1.15rem;
-            font-weight: 800;
-            color: var(--accent-cyan);
-            margin-bottom: 20px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-            width: 100%;
+        @keyframes popIn {
+            from { opacity: 0; transform: scale(0.92); }
+            to { opacity: 1; transform: scale(1); }
         }
 
         .btn {
-            background: var(--accent-blue);
+            background: linear-gradient(135deg, #3B82F6, #1D4ED8);
             color: white;
             border: none;
-            padding: 12px 24px;
-            font-size: 1rem;
+            padding: 12px 26px;
+            font-size: 1.05rem;
             font-weight: 800;
-            border-radius: 14px;
+            border-radius: 50px;
             cursor: pointer;
-            box-shadow: 0 4px 0 #1D4ED8;
+            box-shadow: 0 5px 0px #1E40AF, 0 6px 12px rgba(0,0,0,0.15);
             margin: 6px;
             transition: all 0.15s ease;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
         }
 
         .btn:hover { filter: brightness(1.1); transform: translateY(-2px); }
-        .btn:active { transform: translateY(2px); box-shadow: 0 1px 0 #1D4ED8; }
-        .btn-purple { background: var(--accent-purple); box-shadow: 0 4px 0 #6D28D9; }
-        .btn-orange { background: var(--accent-orange); box-shadow: 0 4px 0 #C2410C; }
+        .btn:active { transform: translateY(2px); box-shadow: 0 2px 0px #1E40AF; }
+        .btn-green { background: linear-gradient(135deg, #10B981, #047857); box-shadow: 0 5px 0px #065F46; }
+        .btn-orange { background: linear-gradient(135deg, #F59E0B, #D97706); box-shadow: 0 5px 0px #B45309; }
+        .btn-purple { background: linear-gradient(135deg, #8B5CF6, #6D28D9); box-shadow: 0 5px 0px #5B21B6; }
 
-        /* KARTU PILIHAN / GRID */
+        .sub-menu-bar {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
         .grid-cards {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(90px, 1fr));
@@ -240,9 +214,9 @@
         }
 
         .card-item {
-            background: #1E293B;
-            border: 2px solid #334155;
-            border-radius: 18px;
+            background: #FFFFFF;
+            border: 4px solid #94A3B8;
+            border-radius: 20px;
             padding: 15px 5px;
             font-size: 2.2rem;
             font-weight: 800;
@@ -251,232 +225,297 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 5px 0 #0F172A;
-            color: #FFF;
+            box-shadow: 0 6px 0px #64748B, 0 8px 15px rgba(0,0,0,0.08);
         }
 
         .card-item:hover {
-            border-color: var(--accent-cyan);
-            transform: translateY(-3px);
-            background: #334155;
+            border-color: #3B82F6;
+            transform: translateY(-4px);
+            background: #EFF6FF;
         }
 
-        .card-item:active { transform: translateY(2px); box-shadow: none; }
+        .card-item:active { transform: translateY(3px); box-shadow: none; }
 
-        /* KARTU KENDARAAN */
-        .vehicle-grid {
+        /* KARTU GAMBAR KENDARAAN */
+        .vehicle-card-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
-            gap: 16px;
+            gap: 18px;
             width: 100%;
-            max-width: 480px;
+            max-width: 500px;
+            margin-top: 15px;
         }
 
         .card-vehicle-img {
-            background: #1E293B;
-            border: 2.5px solid #334155;
-            border-radius: 20px;
-            height: 130px;
-            font-size: 5rem;
+            background: #FFFFFF;
+            border: 4px solid #3B82F6;
+            border-radius: 24px;
+            height: 140px;
+            font-size: 5.5rem;
             cursor: pointer;
-            transition: all 0.2s ease;
+            transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 6px 0 #0F172A;
+            box-shadow: 0 8px 0px #2563EB, 0 10px 18px rgba(0,0,0,0.12);
         }
+
+        .card-vehicle-img:nth-child(1) { border-color: var(--lumia-red); box-shadow: 0 8px 0px #D63031; }
+        .card-vehicle-img:nth-child(2) { border-color: var(--lumia-green); box-shadow: 0 8px 0px #20BF6B; }
+        .card-vehicle-img:nth-child(3) { border-color: var(--lumia-orange); box-shadow: 0 8px 0px #FA8231; }
+        .card-vehicle-img:nth-child(4) { border-color: var(--lumia-purple); box-shadow: 0 8px 0px #8854D0; }
 
         .card-vehicle-img:hover {
-            border-color: var(--accent-cyan);
-            background: #334155;
-            transform: translateY(-4px);
+            transform: translateY(-5px) scale(1.03);
+            background: #F8FAFC;
         }
 
-        /* KARTU HIJAIYYAH BERHARAKAT UTUH */
-        .hijaiyah-grid {
+        .card-vehicle-img:active {
+            transform: translateY(3px);
+            box-shadow: 0 2px 0px rgba(0,0,0,0.2);
+        }
+
+        /* KARTU HIJAIYYAH */
+        .hijaiyah-grid-custom {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(95px, 1fr));
-            gap: 12px;
+            grid-template-columns: repeat(auto-fill, minmax(105px, 1fr));
+            gap: 14px;
             width: 100%;
-            max-height: 320px;
+            max-height: 340px;
             overflow-y: auto;
-            padding: 8px;
+            padding: 12px;
             direction: rtl;
         }
 
         .card-hijaiyah {
-            background: #1E293B;
-            border: 2px solid #334155;
-            border-radius: 18px;
-            height: 110px;
+            background: #FFFFFF;
+            border: 4px solid var(--lumia-yellow);
+            border-radius: 22px;
+            height: 130px;
             font-family: 'Amiri', serif;
-            font-size: 3rem;
+            font-size: 3.2rem;
             font-weight: 700;
-            color: var(--accent-yellow);
+            color: #0F172A;
             cursor: pointer;
             transition: all 0.2s ease;
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 5px 0 #0F172A;
+            box-shadow: 0 7px 0px #D4AC0D, 0 8px 15px rgba(0,0,0,0.08);
+            padding-top: 10px;
+            box-sizing: border-box;
+            line-height: 1;
         }
+
+        .card-hijaiyah:nth-child(4n+1) { border-color: var(--lumia-red); box-shadow: 0 7px 0px #D63031; color: var(--lumia-red); }
+        .card-hijaiyah:nth-child(4n+2) { border-color: var(--lumia-blue); box-shadow: 0 7px 0px #2563EB; color: var(--lumia-blue); }
+        .card-hijaiyah:nth-child(4n+3) { border-color: var(--lumia-green); box-shadow: 0 7px 0px #20BF6B; color: var(--lumia-green); }
+        .card-hijaiyah:nth-child(4n+4) { border-color: var(--lumia-purple); box-shadow: 0 7px 0px #8854D0; color: var(--lumia-purple); }
 
         .card-hijaiyah:hover {
-            border-color: var(--accent-cyan);
-            background: #334155;
-            transform: translateY(-3px);
+            transform: translateY(-4px) scale(1.04);
+            background: #FFFBEB;
         }
 
-        /* PUZZLE & ASAH OTAK */
+        .card-hijaiyah:active {
+            transform: translateY(3px);
+            box-shadow: none;
+        }
+
+        /* PUZZLE VEHICLES */
         .puzzle-box {
             display: flex;
-            gap: 20px;
-            align-items: center;
             justify-content: center;
+            align-items: center;
+            width: 100%;
+            gap: 25px;
+            margin-top: 15px;
             flex-wrap: wrap;
+        }
+
+        .puzzle-target-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background: #FFFFFF;
+            padding: 16px;
+            border-radius: 22px;
+            border: 4px dashed #94A3B8;
         }
 
         .puzzle-shadow {
             width: 120px;
             height: 120px;
-            border-radius: 20px;
+            border-radius: 18px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 4.5rem;
-            background: rgba(0,0,0,0.3);
-            border: 2px dashed var(--accent-cyan);
-            filter: grayscale(100%) opacity(0.3);
+            font-size: 4.8rem;
+            background: #E2E8F0;
+            filter: grayscale(100%) opacity(0.25);
         }
 
         .memory-grid {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
-            gap: 12px;
-            max-width: 380px;
+            gap: 14px;
+            max-width: 400px;
+            margin-top: 10px;
         }
 
         .mem-card {
-            width: 75px;
-            height: 75px;
-            background: var(--accent-blue);
-            border-radius: 16px;
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #3B82F6, #1D4ED8);
+            border-radius: 18px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 2.2rem;
+            font-size: 2.3rem;
             cursor: pointer;
             color: white;
-            box-shadow: 0 4px 0 #1D4ED8;
+            box-shadow: 0 5px 0 #1E40AF;
             font-weight: 800;
         }
 
         .mem-card.flipped {
             background: #FFFFFF;
-            border: 3px solid var(--accent-cyan);
-            color: #0F172A;
-            box-shadow: 0 4px 0 #CBD5E1;
+            border: 4px solid #3B82F6;
+            color: #333;
+            box-shadow: 0 5px 0 #CBD5E1;
         }
 
-        .math-display {
+        .score-badge {
+            position: absolute;
+            top: 18px;
+            right: 20px;
+            background: linear-gradient(135deg, #FFD700, #FFA502);
+            color: #0F172A;
+            font-weight: 800;
+            padding: 8px 18px;
+            border-radius: 50px;
+            font-size: 1rem;
+            box-shadow: 0 4px 0px #D97706;
+            border: 2px solid #FFF;
+        }
+
+        .speech-bubble {
+            background: #FFFFFF;
+            padding: 12px 24px;
+            border-radius: 25px;
+            font-size: 1.25rem;
+            font-weight: 800;
+            color: #0F172A;
+            margin-bottom: 12px;
+            border: 3px solid #CBD5E1;
+            box-shadow: 0 5px 0px #94A3B8;
+        }
+
+        .math-question {
             font-size: 3rem;
-            font-weight: 900;
-            color: var(--accent-yellow);
+            font-weight: 800;
+            color: #8B5CF6;
             margin: 15px 0;
-            background: #0F172A;
+            background: #FFFFFF;
             padding: 10px 30px;
-            border-radius: 18px;
-            border: 2px solid #334155;
+            border-radius: 20px;
+            border: 3px solid #DDD6FE;
         }
     </style>
 </head>
 <body>
 
-    <!-- HEADER PERSIS STYLE MUJAHEEBOT -->
-    <header class="top-banner">
-        <div class="header-left">
-            <div class="header-icon">🚀</div>
-            <div class="header-title-box">
-                <h1>Abror & Arqom Quest</h1>
-                <p>Petualangan Belajar & Game Edukasi TK</p>
-            </div>
-        </div>
-        <div class="score-pill">
-            <span>⭐</span>
-            <span id="scoreDisplay">0</span>
-        </div>
+    <header>
+        <h1>ABROR & ARQOM</h1>
+        <p class="subtitle">Game Edukasi Interaktif Anak TK</p>
     </header>
 
-    <!-- NAVIGATION BAR (TOP CAPSULES) PERSIS GAMBAR REFERENCE -->
-    <div class="menu-bar-scroll">
-        <div class="menu-grid">
-            <button class="nav-pill active" onclick="switchGame('kendaraan', this)">🚗 1. Kendaraan</button>
-            <button class="nav-pill" onclick="switchGame('puzzle', this)">🧩 2. Puzzle Shape</button>
-            <button class="nav-pill" onclick="switchGame('hijaiyah', this)">🌙 3. Hijaiyyah</button>
-            <button class="nav-pill" onclick="switchGame('angka', this)">🔢 4. Angka & Berhitung</button>
-            <button class="nav-pill" onclick="switchGame('alphabet', this)">🔤 5. Alphabet A-Z</button>
-            <button class="nav-pill" onclick="switchGame('asahOtak', this)">🧠 6. Asah Otak</button>
+    <!-- MENU UTAMA METRO TILES (WARNA DIPERBARUI & LEBIH KEREN) -->
+    <div class="menu-grid">
+        <div class="tile tile-red" onclick="switchGame('kendaraan')">
+            <i>🚗</i>
+            <span>Tebak Kendaraan</span>
+        </div>
+        <div class="tile tile-orange" onclick="switchGame('puzzle')">
+            <i>🧩</i>
+            <span>Puzzle Shape</span>
+        </div>
+        <div class="tile tile-yellow" onclick="switchGame('hijaiyah')">
+            <i>🌙</i>
+            <span>Hijaiyyah (A-Ya)</span>
+        </div>
+        <div class="tile tile-green" onclick="switchGame('angka')">
+            <i>🔢</i>
+            <span>Angka & Berhitung</span>
+        </div>
+        <div class="tile tile-blue" onclick="switchGame('alphabet')">
+            <i>🔤</i>
+            <span>Alphabet A-Z</span>
+        </div>
+        <div class="tile tile-purple" onclick="switchGame('asahOtak')">
+            <i>🧠</i>
+            <span>Asah Otak</span>
         </div>
     </div>
 
-    <!-- WADAH WORKSPACE CARD UTAMA -->
-    <div class="main-workspace">
-        <div class="game-card-panel">
+    <!-- WADAH PERMAINAN -->
+    <div class="game-container">
+        <div class="score-badge" id="scoreDisplay">Bintang: ⭐ 0</div>
 
-            <!-- Welcome Screen -->
-            <div id="screen-welcome" class="game-screen">
-                <h2 style="color: var(--accent-cyan); font-size: 1.8rem; margin-bottom: 10px; font-weight: 900;">Pilih Permainan di Atas!</h2>
-                <p style="color: #94A3B8; font-size: 1.05rem; margin-bottom: 20px; font-weight: 700;">Halo Abror & Arqom, mari belajar dan bermain bersama!</p>
-                <button class="btn btn-purple" onclick="speakText('Selamat datang di game challenge Abror dan Arqom! Mari kita mulai bermain!')">🔊 Sapaan Abror & Arqom</button>
-            </div>
+        <!-- Welcome Screen -->
+        <div id="screen-welcome" class="game-screen active">
+            <h2 style="color: #2563EB; margin-bottom: 10px; font-size: 1.8rem; font-weight: 800;">Pilih Permainan di Atas!</h2>
+            <p style="margin-bottom: 20px; font-size: 1.1rem; color: #475569; font-weight: 700;">Halo Abror & Arqom, mari belajar dan bermain bersama!</p>
+            <button class="btn btn-green" onclick="speakText('Selamat datang di game challenge Abror dan Arqom! Mari kita mulai bermain!')">🔊 Sapaan Abror & Arqom</button>
+        </div>
 
-            <!-- 1. Tebak Kendaraan -->
-            <div id="screen-kendaraan" class="game-screen active">
-                <div class="speech-bubble" id="vehiclePrompt">Dengarkan Suaranya!</div>
-                <button class="btn btn-orange" onclick="repeatVehicleAudio()" style="margin-bottom: 15px;">🔊 Ulangi Suara Soal</button>
-                <div class="vehicle-grid" id="vehicleOptions"></div>
-            </div>
+        <!-- 1. Tebak Kendaraan -->
+        <div id="screen-kendaraan" class="game-screen">
+            <div class="speech-bubble" id="vehiclePrompt">Dengarkan Suaranya!</div>
+            <button class="btn btn-orange" onclick="repeatVehicleAudio()">🔊 Ulangi Suara Soal</button>
+            <div class="vehicle-card-grid" id="vehicleOptions"></div>
+        </div>
 
-            <!-- 2. Puzzle Shape -->
-            <div id="screen-puzzle" class="game-screen">
-                <div class="speech-bubble">Cocokkan kendaraan dengan bayangannya!</div>
-                <div class="puzzle-box">
+        <!-- 2. Puzzle Shape -->
+        <div id="screen-puzzle" class="game-screen">
+            <div class="speech-bubble">Cocokkan kendaraan dengan bayangannya!</div>
+            <div class="puzzle-box">
+                <div class="puzzle-target-container">
                     <div id="puzzleTarget" class="puzzle-shadow">✈️</div>
-                    <div class="grid-cards" id="puzzlePieces" style="max-width: 300px;"></div>
                 </div>
+                <div class="grid-cards" id="puzzlePieces" style="max-width: 320px;"></div>
             </div>
+        </div>
 
-            <!-- 3. Hijaiyyah (A-Ya) - Suara Sya & Dza Bebas Ejaan -->
-            <div id="screen-hijaiyah" class="game-screen">
-                <div class="speech-bubble" id="hijaiyahPrompt">Dengarkan dan Tebak Huruf!</div>
-                <button class="btn btn-orange" onclick="repeatHijaiyahAudio()" style="margin-bottom: 12px;">🔊 Ulangi Suara Soal</button>
-                <div class="hijaiyah-grid" id="hijaiyahGrid"></div>
+        <!-- 3. Hijaiyyah (Fathah A-Ya) -->
+        <div id="screen-hijaiyah" class="game-screen">
+            <div class="speech-bubble" id="hijaiyahPrompt">Dengarkan dan Tebak Huruf!</div>
+            <button class="btn btn-orange" onclick="repeatHijaiyahAudio()">🔊 Ulangi Suara Soal</button>
+            <div class="hijaiyah-grid-custom" id="hijaiyahGrid"></div>
+        </div>
+
+        <!-- 4. Angka & Penjumlahan -->
+        <div id="screen-angka" class="game-screen">
+            <div class="sub-menu-bar">
+                <button class="btn btn-blue" onclick="setAngkaMode('mengenal')">1️⃣ Mengenal Angka</button>
+                <button class="btn btn-purple" onclick="setAngkaMode('penjumlahan')">➕ Penjumlahan Ringan</button>
             </div>
+            <div class="speech-bubble" id="angkaPrompt">Pilih Sub Menu di Atas!</div>
+            <div id="mathContainer" style="display: none;" class="math-question">5 + 2 = ?</div>
+            <button class="btn btn-orange" id="repeatAngkaBtn" onclick="repeatAngkaAudio()">🔊 Ulangi Suara Soal</button>
+            <div class="grid-cards" id="angkaGrid" style="grid-template-columns: repeat(5, 1fr);"></div>
+        </div>
 
-            <!-- 4. Angka & Berhitung -->
-            <div id="screen-angka" class="game-screen">
-                <div style="display: flex; gap: 8px; margin-bottom: 15px;">
-                    <button class="btn" onclick="setAngkaMode('mengenal')">1️⃣ Mengenal Angka</button>
-                    <button class="btn btn-purple" onclick="setAngkaMode('penjumlahan')">➕ Penjumlahan</button>
-                </div>
-                <div class="speech-bubble" id="angkaPrompt">Pilih Sub Menu di Atas!</div>
-                <div id="mathContainer" style="display: none;" class="math-display">5 + 2 = ?</div>
-                <button class="btn btn-orange" onclick="repeatAngkaAudio()" style="margin-bottom: 12px;">🔊 Ulangi Suara Soal</button>
-                <div class="grid-cards" id="angkaGrid" style="grid-template-columns: repeat(5, 1fr);"></div>
-            </div>
+        <!-- 5. Alphabet -->
+        <div id="screen-alphabet" class="game-screen">
+            <div class="speech-bubble">Sentuh Huruf Untuk Mendengar Suaranya!</div>
+            <div class="grid-cards" id="alphabetGrid" style="grid-template-columns: repeat(6, 1fr); max-height: 270px; overflow-y: auto;"></div>
+        </div>
 
-            <!-- 5. Alphabet -->
-            <div id="screen-alphabet" class="game-screen">
-                <div class="speech-bubble">Sentuh Huruf Untuk Mendengar Suaranya!</div>
-                <div class="grid-cards" id="alphabetGrid" style="grid-template-columns: repeat(6, 1fr); max-height: 280px; overflow-y: auto;"></div>
-            </div>
-
-            <!-- 6. Asah Otak -->
-            <div id="screen-asahOtak" class="game-screen">
-                <div class="speech-bubble">Temukan Dua Gambar yang Sama!</div>
-                <div class="memory-grid" id="memoryGrid"></div>
-            </div>
-
+        <!-- 6. Asah Otak -->
+        <div id="screen-asahOtak" class="game-screen">
+            <div class="speech-bubble">Temukan Dua Gambar yang Sama!</div>
+            <div class="memory-grid" id="memoryGrid"></div>
         </div>
     </div>
 
@@ -531,7 +570,7 @@
             const praises = ["Kamu hebat!", "Abror hebat!", "Arqom hebat!", "Pintar sekali!", "Luar biasa!", "Jawaban kamu benar!"];
             const randomPraise = praises[Math.floor(Math.random() * praises.length)];
             score += 10;
-            document.getElementById('scoreDisplay').innerText = score;
+            document.getElementById('scoreDisplay').innerText = `Bintang: ⭐ ${score}`;
             playCorrectSFX();
             speakText(randomPraise);
         }
@@ -541,10 +580,7 @@
             speakText("Ayo coba lagi ya!");
         }
 
-        function switchGame(gameName, btnElement) {
-            document.querySelectorAll('.nav-pill').forEach(btn => btn.classList.remove('active'));
-            if(btnElement) btnElement.classList.add('active');
-
+        function switchGame(gameName) {
             document.querySelectorAll('.game-screen').forEach(s => s.classList.remove('active'));
             document.getElementById(`screen-${gameName}`).classList.add('active');
 
@@ -556,7 +592,7 @@
             if (gameName === 'asahOtak') initMemoryGame();
         }
 
-        /* 1. KENDARAAN */
+        /* 1. TEBAK KENDARAAN */
         const vehicles = [
             { name: "Mobil", emoji: "🚗" },
             { name: "Motor", emoji: "🏍️" },
@@ -608,7 +644,7 @@
             }
         }
 
-        /* 2. PUZZLE */
+        /* 2. PUZZLE GAME */
         function initPuzzleGame() {
             const shuffled = [...vehicles].sort(() => Math.random() - 0.5);
             const target = shuffled[0];
@@ -638,7 +674,7 @@
             });
         }
 
-        /* 3. HIJAIYYAH (Sya -> Sha & Dza -> Zha agar langsung bunyi) */
+        /* 3. HIJAIYYAH BERHARAKAT FATHAH (DIPERBAIKI SUARA "SHA" & "ZHA") */
         const hijaiyahFathahData = [
             { char: "أَ", sound: "A", speak: "A" },
             { char: "بَ", sound: "Ba", speak: "Ba" },
@@ -648,11 +684,11 @@
             { char: "حَ", sound: "Ha", speak: "Ha" },
             { char: "خَ", sound: "Kho", speak: "Kho" },
             { char: "دَ", sound: "Da", speak: "Da" },
-            { char: "ذَ", sound: "Dza", speak: "Zha" },
+            { char: "ذَ", sound: "Dza", speak: "Zha" }, /* Tidak dieja de-zet-a */
             { char: "رَ", sound: "Ro", speak: "Ro" },
             { char: "زَ", sound: "Za", speak: "Za" },
             { char: "سَ", sound: "Sa", speak: "Sa" },
-            { char: "شَ", sound: "Sya", speak: "Sha" },
+            { char: "شَ", sound: "Sya", speak: "Sha" }, /* Tidak dieja es-ye-a */
             { char: "صَ", sound: "Sho", speak: "Sho" },
             { char: "ضَ", sound: "Dho", speak: "Dho" },
             { char: "طَ", sound: "Tho", speak: "Tho" },
@@ -702,7 +738,7 @@
             }
         }
 
-        /* 4. ANGKA */
+        /* 4. ANGKA & PENJUMLAHAN */
         function setAngkaMode(mode) {
             angkaMode = mode;
             initAngkaGame();
@@ -764,7 +800,7 @@
             }
         }
 
-        /* 5. ALPHABET */
+        /* 5. ALPHABET GAME */
         function initAlphabetGame() {
             const container = document.getElementById('alphabetGrid');
             container.innerHTML = '';
@@ -779,7 +815,7 @@
             }
         }
 
-        /* 6. ASAH OTAK */
+        /* 6. ASAH OTAK (MEMORY) */
         const memoryIcons = ['🚗', '✈️', '🍎', '🐱', '🚗', '✈️', '🍎', '🐱'];
         let flippedCards = [];
         let matchedPairs = 0;
@@ -835,7 +871,6 @@
         }
 
         window.onload = () => {
-            initVehicleGame();
             setTimeout(() => {
                 speakText("Selamat datang di game challenge Abror dan Arqom!");
             }, 800);
