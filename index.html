@@ -28,7 +28,6 @@
 
         body {
             background-color: var(--lumia-dark);
-            /* Motif halus dot transparan */
             background-image: radial-gradient(rgba(255, 255, 255, 0.08) 2px, transparent 2px);
             background-size: 24px 24px;
             color: white;
@@ -44,7 +43,6 @@
             margin-bottom: 25px;
         }
 
-        /* FONT JUDUL BARU - TEBAL, MEMBULAT & KEREN */
         h1 {
             font-family: 'Fredoka', sans-serif;
             font-size: 2.8rem;
@@ -67,7 +65,7 @@
             text-transform: uppercase;
         }
 
-        /* MENU METRO TILES - DIPERBARUI DENGAN WARNA & EFEK DINGIN/GLOW KEREN */
+        /* MENU METRO TILES */
         .menu-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
@@ -94,7 +92,6 @@
             overflow: hidden;
         }
 
-        /* Efek Kilau / Highlight Halus di Atas Card Menu */
         .tile::before {
             content: '';
             position: absolute;
@@ -130,7 +127,6 @@
             text-shadow: 0 2px 4px rgba(0,0,0,0.3);
         }
 
-        /* SKEMA WARNA MENU BARU LEBIH TAJAM & KEREN */
         .tile-red    { background: linear-gradient(135deg, #FF3366, #E81123); border-color: #FF708F; }
         .tile-orange { background: linear-gradient(135deg, #FF6B00, #D95300); border-color: #FF9E59; }
         .tile-yellow { background: linear-gradient(135deg, #FFB800, #E69500); border-color: #FFE082; }
@@ -138,7 +134,7 @@
         .tile-blue   { background: linear-gradient(135deg, #0078D4, #005A9E); border-color: #60A5FA; }
         .tile-purple { background: linear-gradient(135deg, #8B5CF6, #6D28D9); border-color: #C4B5FD; }
 
-        /* WADAH PERMAINAN (TETAP SESUAI DESAIN LAMA) */
+        /* WADAH PERMAINAN */
         .game-container {
             background-color: var(--lumia-card-bg);
             background-image: radial-gradient(#CBD5E1 2px, transparent 2px);
@@ -236,7 +232,6 @@
 
         .card-item:active { transform: translateY(3px); box-shadow: none; }
 
-        /* KARTU GAMBAR KENDARAAN */
         .vehicle-card-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
@@ -275,7 +270,6 @@
             box-shadow: 0 2px 0px rgba(0,0,0,0.2);
         }
 
-        /* KARTU HIJAIYYAH */
         .hijaiyah-grid-custom {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(105px, 1fr));
@@ -322,7 +316,6 @@
             box-shadow: none;
         }
 
-        /* PUZZLE VEHICLES */
         .puzzle-box {
             display: flex;
             justify-content: center;
@@ -430,7 +423,7 @@
         <p class="subtitle">Game Edukasi Interaktif Anak TK</p>
     </header>
 
-    <!-- MENU UTAMA METRO TILES (WARNA DIPERBARUI & LEBIH KEREN) -->
+    <!-- MENU METRO TILES -->
     <div class="menu-grid">
         <div class="tile tile-red" onclick="switchGame('kendaraan')">
             <i>🚗</i>
@@ -527,8 +520,19 @@
         let currentMathAnswer = 0;
         let angkaMode = 'mengenal';
         let currentPuzzleAnswer = '';
+        let systemVoices = [];
 
         const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+        function loadVoices() {
+            if ('speechSynthesis' in window) {
+                systemVoices = window.speechSynthesis.getVoices();
+            }
+        }
+        if ('speechSynthesis' in window) {
+            window.speechSynthesis.onvoiceschanged = loadVoices;
+            loadVoices();
+        }
 
         function playTone(freq, type, duration) {
             try {
@@ -560,8 +564,20 @@
                 window.speechSynthesis.cancel();
                 const utterance = new SpeechSynthesisUtterance(text);
                 utterance.lang = 'id-ID';
-                utterance.rate = 0.85;
-                utterance.pitch = 1.2;
+                utterance.rate = 0.88;
+                utterance.pitch = 1.0; 
+
+                // Cari apakah ada profil suara LAKI-LAKI di HP/Laptop
+                if (systemVoices.length > 0) {
+                    const idVoices = systemVoices.filter(v => v.lang.includes('id') || v.lang.includes('ID'));
+                    const maleVoice = idVoices.find(v => v.name.toLowerCase().includes('male') || v.name.toLowerCase().includes('pria') || v.name.toLowerCase().includes('david') || v.name.toLowerCase().includes('idris'));
+                    if (maleVoice) {
+                        utterance.voice = maleVoice;
+                    } else if (idVoices.length > 0) {
+                        utterance.voice = idVoices[0];
+                    }
+                }
+
                 window.speechSynthesis.speak(utterance);
             }
         }
@@ -674,7 +690,7 @@
             });
         }
 
-        /* 3. HIJAIYYAH BERHARAKAT FATHAH (DIPERBAIKI SUARA "SHA" & "ZHA") */
+        /* 3. HIJAIYYAH (EJAAN LAFAL FONETIS FASIH) */
         const hijaiyahFathahData = [
             { char: "أَ", sound: "A", speak: "A" },
             { char: "بَ", sound: "Ba", speak: "Ba" },
@@ -682,21 +698,21 @@
             { char: "ثَ", sound: "Tsa", speak: "Tsa" },
             { char: "جَ", sound: "Ja", speak: "Ja" },
             { char: "حَ", sound: "Ha", speak: "Ha" },
-            { char: "خَ", sound: "Kho", speak: "Kho" },
+            { char: "خَ", sound: "Kho", speak: "Ho" },      /* "Kho" diubah ke "Ho" agar tidak dieja K-H-O */
             { char: "دَ", sound: "Da", speak: "Da" },
-            { char: "ذَ", sound: "Dza", speak: "Zha" }, /* Tidak dieja de-zet-a */
+            { char: "ذَ", sound: "Dza", speak: "Zha" },    /* "Dza" diubah ke "Zha" agar tak dieja D-Z-A */
             { char: "رَ", sound: "Ro", speak: "Ro" },
             { char: "زَ", sound: "Za", speak: "Za" },
             { char: "سَ", sound: "Sa", speak: "Sa" },
-            { char: "شَ", sound: "Sya", speak: "Sha" }, /* Tidak dieja es-ye-a */
-            { char: "صَ", sound: "Sho", speak: "Sho" },
-            { char: "ضَ", sound: "Dho", speak: "Dho" },
-            { char: "طَ", sound: "Tho", speak: "Tho" },
-            { char: "ظَ", sound: "Zho", speak: "Zho" },
+            { char: "شَ", sound: "Sya", speak: "Sha" },    /* "Sya" diubah ke "Sha" agar tak dieja S-Y-A */
+            { char: "صَ", sound: "Sho", speak: "So" },     /* "Sho" diubah ke "So" agar tak dieja S-H-O */
+            { char: "ضَ", sound: "Dho", speak: "Do" },     /* "Dho" diubah ke "Do" agar tak dieja D-H-O */
+            { char: "طَ", sound: "Tho", speak: "To" },     /* "Tho" diubah ke "To" agar tak dieja T-H-O */
+            { char: "ظَ", sound: "Zho", speak: "Zo" },     /* "Zho" diubah ke "Zo" agar tak dieja Z-H-O */
             { char: "عَ", sound: "'A", speak: "A" },
-            { char: "غَ", sound: "Gho", speak: "Gho" },
+            { char: "غَ", sound: "Gho", speak: "Go" },     /* "Gho" diubah ke "Go" agar tak dieja G-H-O */
             { char: "فَ", sound: "Fa", speak: "Fa" },
-            { char: "قَ", sound: "Qo", speak: "Qo" },
+            { char: "قَ", sound: "Qo", speak: "Ko" },
             { char: "كَ", sound: "Ka", speak: "Ka" },
             { char: "لَ", sound: "La", speak: "La" },
             { char: "مَ", sound: "Ma", speak: "Ma" },
