@@ -125,7 +125,7 @@
         .tile-blue { background: linear-gradient(145deg, #1E90FF, #2980B9); }
         .tile-purple { background: linear-gradient(145deg, #9B59B6, #8E44AD); }
 
-        /* WADAH PERMAINAN (AREA PUTIH MOTIF DOTS) */
+        /* WADAH PERMAINAN */
         .game-container {
             background-color: var(--lumia-card-bg);
             background-image: radial-gradient(#CBD5E1 2px, transparent 2px);
@@ -262,7 +262,7 @@
             box-shadow: 0 2px 0px rgba(0,0,0,0.2);
         }
 
-        /* PERBAIKAN UTAMA: KARTU HIJAIYYAH BERHARAKAT UTUH */
+        /* KARTU HIJAIYYAH BERHARAKAT UTUH */
         .hijaiyah-grid-custom {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(105px, 1fr));
@@ -278,9 +278,9 @@
             background: #FFFFFF;
             border: 4px solid var(--lumia-yellow);
             border-radius: 22px;
-            height: 130px; /* Diperbesar agar harakat tidak keluar */
+            height: 130px;
             font-family: 'Amiri', serif;
-            font-size: 3.2rem; /* Ukuran pas presisi */
+            font-size: 3.2rem;
             font-weight: 700;
             color: #0F172A;
             cursor: pointer;
@@ -289,7 +289,7 @@
             align-items: center;
             justify-content: center;
             box-shadow: 0 7px 0px #D4AC0D, 0 8px 15px rgba(0,0,0,0.08);
-            padding-top: 10px; /* Memberi ruang untuk harakat fathah di atas */
+            padding-top: 10px;
             box-sizing: border-box;
             line-height: 1;
         }
@@ -661,36 +661,36 @@
             });
         }
 
-        /* 3. HIJAIYYAH BERHARAKAT FATHAH (A-YA) */
+        /* 3. HIJAIYYAH BERHARAKAT FATHAH (DIPERBAIKI PENJELASAN PENGUCAPAN) */
         const hijaiyahFathahData = [
-            { char: "أَ", sound: "A" },
-            { char: "بَ", sound: "Ba" },
-            { char: "تَ", sound: "Ta" },
-            { char: "ثَ", sound: "Tsa" },
-            { char: "جَ", sound: "Ja" },
-            { char: "حَ", sound: "Ha" },
-            { char: "خَ", sound: "Kho" },
-            { char: "دَ", sound: "Da" },
-            { char: "ذَ", sound: "Dza" },
-            { char: "رَ", sound: "Ro" },
-            { char: "زَ", sound: "Za" },
-            { char: "سَ", sound: "Sa" },
-            { char: "شَ", sound: "Sya" },
-            { char: "صَ", sound: "Sho" },
-            { char: "ضَ", sound: "Dho" },
-            { char: "طَ", sound: "Tho" },
-            { char: "ظَ", sound: "Zho" },
-            { char: "عَ", sound: "'A" },
-            { char: "غَ", sound: "Gho" },
-            { char: "فَ", sound: "Fa" },
-            { char: "قَ", sound: "Qo" },
-            { char: "كَ", sound: "Ka" },
-            { char: "لَ", sound: "La" },
-            { char: "مَ", sound: "Ma" },
-            { char: "نَ", sound: "Na" },
-            { char: "هَـ", sound: "Ha" },
-            { char: "وَ", sound: "Wa" },
-            { char: "يَ", sound: "Ya" }
+            { char: "أَ", sound: "A", speak: "A" },
+            { char: "بَ", sound: "Ba", speak: "Ba" },
+            { char: "تَ", sound: "Ta", speak: "Ta" },
+            { char: "ثَ", sound: "Tsa", speak: "Tsa" },
+            { char: "جَ", sound: "Ja", speak: "Ja" },
+            { char: "حَ", sound: "Ha", speak: "Ha" },
+            { char: "خَ", sound: "Kho", speak: "Kho" },
+            { char: "دَ", sound: "Da", speak: "Da" },
+            { char: "ذَ", sound: "Dza", speak: "Zha" }, /* Disesuaikan agar pengucapan langsung 'Zha', tidak dieja */
+            { char: "رَ", sound: "Ro", speak: "Ro" },
+            { char: "زَ", sound: "Za", speak: "Za" },
+            { char: "سَ", sound: "Sa", speak: "Sa" },
+            { char: "شَ", sound: "Sya", speak: "Sha" }, /* Disesuaikan agar pengucapan langsung 'Sha', tidak dieja */
+            { char: "صَ", sound: "Sho", speak: "Sho" },
+            { char: "ضَ", sound: "Dho", speak: "Dho" },
+            { char: "طَ", sound: "Tho", speak: "Tho" },
+            { char: "ظَ", sound: "Zho", speak: "Zho" },
+            { char: "عَ", sound: "'A", speak: "A" },
+            { char: "غَ", sound: "Gho", speak: "Gho" },
+            { char: "فَ", sound: "Fa", speak: "Fa" },
+            { char: "قَ", sound: "Qo", speak: "Qo" },
+            { char: "كَ", sound: "Ka", speak: "Ka" },
+            { char: "لَ", sound: "La", speak: "La" },
+            { char: "مَ", sound: "Ma", speak: "Ma" },
+            { char: "نَ", sound: "Na", speak: "Na" },
+            { char: "هَـ", sound: "Ha", speak: "Ha" },
+            { char: "وَ", sound: "Wa", speak: "Wa" },
+            { char: "يَ", sound: "Ya", speak: "Ya" }
         ];
 
         function initHijaiyahGame() {
@@ -707,7 +707,7 @@
                 card.className = 'card-hijaiyah';
                 card.innerText = item.char;
                 card.onclick = () => {
-                    speakText(item.sound);
+                    speakText(item.speak);
                     if (item.sound === currentTargetHijaiyah.sound) {
                         givePraise();
                         setTimeout(initHijaiyahGame, 1800);
@@ -720,8 +720,8 @@
         }
 
         function repeatHijaiyahAudio() {
-            if (currentTargetHijaiyah.sound) {
-                speakText(`Coba mana huruf ${currentTargetHijaiyah.sound}?`);
+            if (currentTargetHijaiyah.speak) {
+                speakText(`Coba mana huruf ${currentTargetHijaiyah.speak}?`);
             }
         }
 
