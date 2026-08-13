@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Game Edukasi Abror & Arqom</title>
-    <!-- Import Font Arab (Amiri Bold) & Font UI (Fredoka / Bold Playful) -->
+    <!-- Import Font Arab (Amiri Bold) & Font UI (Fredoka) -->
     <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,700;1,700&family=Fredoka:wght@600;700;800&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -174,7 +174,6 @@
             justify-content: center;
         }
 
-        /* GRID ITEM UNTUK JAWABAN & ANGKAN */
         .grid-cards {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(85px, 1fr));
@@ -206,7 +205,46 @@
 
         .card-item:active { transform: translateY(3px); box-shadow: none; }
 
-        /* KARTU HIJAIYYAH DENGAN HARAKAT (BESAR, GEMUK, WARNA-WARNI) */
+        /* KARTU GAMBAR KENDARAAN (UKURAN BESAR UNTUK ANAK TK) */
+        .vehicle-card-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 18px;
+            width: 100%;
+            max-width: 480px;
+            margin-top: 15px;
+        }
+
+        .card-vehicle-img {
+            background: #FFF;
+            border: 4px solid var(--lumia-blue);
+            border-radius: 24px;
+            height: 130px;
+            font-size: 5rem; /* Emoji Gambar Sangat Besar */
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 8px 0px var(--lumia-blue), 0 10px 15px rgba(0,0,0,0.1);
+        }
+
+        .card-vehicle-img:nth-child(1) { border-color: var(--lumia-red); box-shadow: 0 8px 0px var(--lumia-red); }
+        .card-vehicle-img:nth-child(2) { border-color: var(--lumia-green); box-shadow: 0 8px 0px var(--lumia-green); }
+        .card-vehicle-img:nth-child(3) { border-color: var(--lumia-orange); box-shadow: 0 8px 0px var(--lumia-orange); }
+        .card-vehicle-img:nth-child(4) { border-color: var(--lumia-purple); box-shadow: 0 8px 0px var(--lumia-purple); }
+
+        .card-vehicle-img:hover {
+            transform: translateY(-4px) scale(1.04);
+            background: #F8FAFC;
+        }
+
+        .card-vehicle-img:active {
+            transform: translateY(4px);
+            box-shadow: none;
+        }
+
+        /* KARTU HIJAIYYAH BERHARAKAT */
         .hijaiyah-grid-custom {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(95px, 1fr));
@@ -215,7 +253,7 @@
             max-height: 330px;
             overflow-y: auto;
             padding: 10px;
-            direction: rtl; /* Urutan Kanan ke Kiri */
+            direction: rtl;
         }
 
         .card-hijaiyah {
@@ -224,7 +262,7 @@
             border-radius: 22px;
             height: 110px;
             font-family: 'Amiri', serif;
-            font-size: 4rem; /* Sangat Besar & Tebal */
+            font-size: 4rem;
             font-weight: 700;
             color: #0F172A;
             cursor: pointer;
@@ -237,7 +275,6 @@
             text-shadow: 2px 2px 0px rgba(0,0,0,0.08);
         }
 
-        /* Warna-warni bingkai kartu Hijaiyyah secara acak */
         .card-hijaiyah:nth-child(4n+1) { border-color: var(--lumia-red); box-shadow: 0 6px 0px var(--lumia-red); color: var(--lumia-red); }
         .card-hijaiyah:nth-child(4n+2) { border-color: var(--lumia-blue); box-shadow: 0 6px 0px var(--lumia-blue); color: var(--lumia-blue); }
         .card-hijaiyah:nth-child(4n+3) { border-color: var(--lumia-green); box-shadow: 0 6px 0px var(--lumia-green); color: var(--lumia-green); }
@@ -251,12 +288,6 @@
         .card-hijaiyah:active {
             transform: translateY(3px);
             box-shadow: none;
-        }
-
-        .vehicle-display {
-            font-size: 6.5rem;
-            margin: 10px 0;
-            filter: drop-shadow(3px 6px 10px rgba(0,0,0,0.15));
         }
 
         /* PUZZLE VEHICLES */
@@ -341,7 +372,7 @@
             font-size: 1.2rem;
             font-weight: 800;
             color: var(--lumia-dark);
-            margin-bottom: 12px;
+            margin-bottom: 10px;
             border: 3px solid #CBD5E1;
         }
 
@@ -402,11 +433,11 @@
             <button class="btn btn-green" onclick="speakText('Selamat datang di game challenge Abror dan Arqom! Mari kita mulai bermain!')">🔊 Sapaan Abror & Arqom</button>
         </div>
 
-        <!-- 1. Tebak Kendaraan -->
+        <!-- 1. Tebak Kendaraan (Soal Suara, Jawabannya Gambar) -->
         <div id="screen-kendaraan" class="game-screen">
-            <div class="speech-bubble" id="vehiclePrompt">Apa nama kendaraan ini?</div>
-            <div class="vehicle-display" id="vehicleEmoji">🚒</div>
-            <div class="grid-cards" id="vehicleOptions" style="grid-template-columns: repeat(2, 1fr);"></div>
+            <div class="speech-bubble" id="vehiclePrompt">Dengarkan Suaranya!</div>
+            <button class="btn btn-orange" onclick="repeatVehicleAudio()">🔊 Ulangi Suara Soal</button>
+            <div class="vehicle-card-grid" id="vehicleOptions"></div>
         </div>
 
         <!-- 2. Puzzle Shape Kendaraan -->
@@ -420,7 +451,7 @@
             </div>
         </div>
 
-        <!-- 3. Hijaiyyah (Dengan Harakat Fathah & Pelafalan Bunyi A-Ya) -->
+        <!-- 3. Hijaiyyah (Fathah A-Ya) -->
         <div id="screen-hijaiyah" class="game-screen">
             <div class="speech-bubble" id="hijaiyahPrompt">Dengarkan dan Tebak Huruf!</div>
             <button class="btn btn-orange" onclick="repeatHijaiyahAudio()">🔊 Ulangi Suara Soal</button>
@@ -454,11 +485,11 @@
 
     <script>
         let score = 0;
+        let currentTargetVehicle = {};
         let currentTargetHijaiyah = {};
         let currentTargetAngka = 0;
         let currentMathAnswer = 0;
-        let angkaMode = 'mengenal'; // 'mengenal' atau 'penjumlahan'
-        let currentVehicleAnswer = '';
+        let angkaMode = 'mengenal';
         let currentPuzzleAnswer = '';
 
         const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
@@ -525,7 +556,7 @@
             if (gameName === 'asahOtak') initMemoryGame();
         }
 
-        /* 1. KENDARAAN DATA */
+        /* 1. TEBAK KENDARAAN (SOAL SUARA + PILIHAN GAMBAR) */
         const vehicles = [
             { name: "Mobil", emoji: "🚗" },
             { name: "Motor", emoji: "🏍️" },
@@ -533,7 +564,7 @@
             { name: "Kapal Laut", emoji: "🚢" },
             { name: "Kereta Api", emoji: "🚂" },
             { name: "Helikopter", emoji: "🚁" },
-            { name: "Pemadam", emoji: "🚒" },
+            { name: "Pemadam Kebakaran", emoji: "🚒" },
             { name: "Ambulans", emoji: "🚑" },
             { name: "Truk", emoji: "🚚" },
             { name: "Sepeda", emoji: "🚲" }
@@ -541,15 +572,15 @@
 
         function initVehicleGame() {
             const current = vehicles[Math.floor(Math.random() * vehicles.length)];
-            currentVehicleAnswer = current.name;
+            currentTargetVehicle = current;
 
-            document.getElementById('vehicleEmoji').innerText = current.emoji;
-            speakText("Coba tebak, apa nama kendaraan ini?");
+            document.getElementById('vehiclePrompt').innerText = `Manakah gambar ${current.name}?`;
+            repeatVehicleAudio();
 
-            let options = [current.name];
+            let options = [current];
             while(options.length < 4) {
-                let r = vehicles[Math.floor(Math.random() * vehicles.length)].name;
-                if(!options.includes(r)) options.push(r);
+                let r = vehicles[Math.floor(Math.random() * vehicles.length)];
+                if(!options.some(item => item.name === r.name)) options.push(r);
             }
             options.sort(() => Math.random() - 0.5);
 
@@ -557,18 +588,24 @@
             container.innerHTML = '';
             options.forEach(opt => {
                 const btn = document.createElement('div');
-                btn.className = 'card-item';
-                btn.innerText = opt;
+                btn.className = 'card-vehicle-img';
+                btn.innerText = opt.emoji;
                 btn.onclick = () => {
-                    if (opt === currentVehicleAnswer) {
+                    if (opt.name === currentTargetVehicle.name) {
                         givePraise();
-                        setTimeout(initVehicleGame, 1500);
+                        setTimeout(initVehicleGame, 1800);
                     } else {
                         giveTryAgain();
                     }
                 };
                 container.appendChild(btn);
             });
+        }
+
+        function repeatVehicleAudio() {
+            if (currentTargetVehicle.name) {
+                speakText(`Coba pilih, manakah gambar ${currentTargetVehicle.name}?`);
+            }
         }
 
         /* 2. PUZZLE GAME */
@@ -601,7 +638,7 @@
             });
         }
 
-        /* 3. DATA HIJAIYYAH DENGAN HARAKAT FATHAH (PELAFALAN BUNYI A-YA) */
+        /* 3. HIJAIYYAH BERHARAKAT FATHAH (A-YA) */
         const hijaiyahFathahData = [
             { char: "أَ", sound: "A" },
             { char: "بَ", sound: "Ba" },
@@ -665,7 +702,7 @@
             }
         }
 
-        /* 4. ANGKA & SUB-MENU PENJUMLAHAN RINGAN */
+        /* 4. ANGKA & PENJUMLAHAN */
         function setAngkaMode(mode) {
             angkaMode = mode;
             initAngkaGame();
@@ -681,7 +718,6 @@
                 promptText.innerText = `Pilih Angka ${currentTargetAngka}!`;
                 speakText(`Coba pilih angka ${currentTargetAngka}!`);
             } else {
-                // Mode Penjumlahan Ringan (Total masksimal 10)
                 let num1 = Math.floor(Math.random() * 5) + 1;
                 let num2 = Math.floor(Math.random() * 5) + 1;
                 currentMathAnswer = num1 + num2;
