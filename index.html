@@ -12,7 +12,14 @@ body{background:var(--dark) radial-gradient(rgba(255,255,255,.08) 2px,transparen
 header{text-align:center;margin-bottom:18px}
 h1{font-size:clamp(1.9rem,6vw,2.8rem);font-weight:700;background:linear-gradient(180deg,#FFE17D,#FFB703);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;letter-spacing:1px;text-transform:uppercase;line-height:1.1}
 .subtitle{font-size:.95rem;color:#94A3B8;font-weight:600;margin-top:6px}
-.menu-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(118px,1fr));gap:12px;width:100%;max-width:900px;margin-bottom:20px}
+.menu-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:12px;width:100%;max-width:900px;margin-bottom:20px}
+@media(max-width:760px){.menu-grid{grid-template-columns:repeat(4,1fr)}}
+@media(max-width:520px){.menu-grid{grid-template-columns:repeat(3,1fr);gap:9px}.tile{min-height:96px;padding:10px 4px}.tile i{font-size:2rem}.tile span{font-size:.8rem}}
+.c-indigo{background:linear-gradient(135deg,#6366F1,#4338CA)}
+.ar{font-family:'Amiri',serif;direction:rtl;font-size:2.3rem;line-height:1.9;color:#0F172A;background:#fff;border:4px solid #FFA502;border-radius:22px;padding:12px 18px;margin:8px 0;max-width:560px;width:100%}
+.latin{font-size:1.15rem;font-weight:600;color:#2563EB;max-width:520px}.arti{font-size:1rem;color:#475569;margin:6px 0;max-width:520px}.src{font-size:.8rem;color:#64748B;margin-bottom:6px}
+.gate{background:#FEF3C7;border:3px solid #F59E0B;border-radius:20px;padding:14px 18px;max-width:420px}
+.media{width:100%;max-width:560px;background:#fff;border:3px solid #CBD5E1;border-radius:18px;padding:12px;margin:8px 0}.media audio{width:100%;margin-top:6px}
 .tile{padding:14px 8px;border-radius:22px;text-align:center;cursor:pointer;transition:transform .2s,box-shadow .2s;box-shadow:0 8px 18px rgba(0,0,0,.3);display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:108px;border:2px solid rgba(255,255,255,.25);position:relative;overflow:hidden;color:#fff;font-weight:600}
 .tile::before{content:'';position:absolute;inset:0 0 60%;background:linear-gradient(180deg,rgba(255,255,255,.22),transparent);pointer-events:none}
 .tile:hover{transform:translateY(-5px)}.tile:active{transform:translateY(2px)}
@@ -110,7 +117,8 @@ const MODS=[
  ['urutan','🪥','Urutan Kegiatan','c-teal','Urutan',modUrutan],
  ['sebab','💡','Sebab & Akibat','c-yellow','Sebab-Akibat',modSebab],
  ['robot','🤖','Robot Cari Jalan','c-green','Algoritma',()=>modMaze('algo')],
- ['debug','🔧','Perbaiki Robot','c-red','Debugging',()=>modMaze('debug')]
+ ['debug','🔧','Perbaiki Robot','c-red','Debugging',()=>modMaze('debug')],
+ ['doa','🤲','Doa & Nasyid','c-indigo','Islami',()=>modDoa('doa')]
 ];
 const menu=$('#menu');
 MODS.forEach(([id,ic,label,col,chip,fn])=>{
@@ -118,7 +126,7 @@ MODS.forEach(([id,ic,label,col,chip,fn])=>{
  t.innerHTML=`<i>${ic}</i><span>${label}</span>${chip?`<small>${chip}</small>`:''}`;
  const go=()=>openMod(id);t.onclick=go;t.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();go()}};menu.appendChild(t)});
 function openMod(id){
- if(ctx)ctx.resume();clearTimers();if('speechSynthesis' in window)speechSynthesis.cancel();
+ if(ctx)ctx.resume();clearTimers();stopAudio();if('speechSynthesis' in window)speechSynthesis.cancel();
  activeId=id;document.querySelectorAll('.tile').forEach(t=>t.classList.toggle('on',t.id==='tile-'+id));
  const m=MODS.find(x=>x[0]===id);$('#pill').textContent=m[1]+' '+m[2];m[5]();
  $('.game-container').scrollIntoView({behavior:'smooth',block:'start'})}
@@ -328,6 +336,75 @@ function modMaze(mode){
  drawM();drawT();mount(info,tip,mz,tray,pad,act);
  later(()=>speak(mode==='algo'?'Susun panah agar robot sampai ke bintang!':'Robot tersesat! Jalankan, lalu cari langkah yang salah dan perbaiki!'),300);
 }
+
+/* ============ 12. DOA & NASYID ============ */
+/* >>> BAGIAN 1: DATA DOA. Taruh file audio di folder /audio/ dengan nama sesuai kolom "audio".
+   Jika file belum ada, otomatis memakai suara cadangan (TTS). Mohon dicek ustadz/guru sebelum dipublikasikan. */
+const DOA=[
+ {ic:'🍽️',judul:'Sebelum Makan',ar:'بِسْمِ اللَّهِ',lat:'Bismillāh',arti:'Dengan nama Allah.',sumber:'HR. Bukhari & Muslim',audio:'audio/doa-sebelum-makan.mp3',tts:'Bismillah'},
+ {ic:'😋',judul:'Sesudah Makan',ar:'الْحَمْدُ لِلَّهِ',lat:'Alḥamdulillāh',arti:'Segala puji bagi Allah.',sumber:'HR. Muslim',audio:'audio/doa-sesudah-makan.mp3',tts:'Alhamdulillah'},
+ {ic:'🛏️',judul:'Sebelum Tidur',ar:'بِاسْمِكَ اللَّهُمَّ أَمُوتُ وَأَحْيَا',lat:'Bismika Allāhumma amūtu wa aḥyā',arti:'Dengan nama-Mu ya Allah, aku mati dan aku hidup.',sumber:'HR. Bukhari',audio:'audio/doa-sebelum-tidur.mp3',tts:'Bismika Allahumma amuutu wa ahyaa'},
+ {ic:'🌅',judul:'Bangun Tidur',ar:'الْحَمْدُ لِلَّهِ الَّذِي أَحْيَانَا بَعْدَ مَا أَمَاتَنَا وَإِلَيْهِ النُّشُورُ',lat:'Alḥamdu lillāhil-ladzī aḥyānā ba‘da mā amātanā wa ilaihin-nusyūr',arti:'Segala puji bagi Allah yang menghidupkan kami setelah mematikan kami, dan kepada-Nya kami dibangkitkan.',sumber:'HR. Bukhari',audio:'audio/doa-bangun-tidur.mp3',tts:'Alhamdulillahilladzi ahyaana ba\'da maa amaatana wa ilaihin nusyuur'},
+ {ic:'🚽',judul:'Masuk Kamar Mandi',ar:'اللَّهُمَّ إِنِّي أَعُوذُ بِكَ مِنَ الْخُبُثِ وَالْخَبَائِثِ',lat:'Allāhumma innī a‘ūdzu bika minal-khubutsi wal-khabā’its',arti:'Ya Allah, aku berlindung kepada-Mu dari setan laki-laki dan setan perempuan.',sumber:'HR. Bukhari & Muslim',audio:'audio/doa-masuk-kamar-mandi.mp3',tts:'Allahumma inni a\'uudzu bika minal khubutsi wal khobaaits'},
+ {ic:'🏠',judul:'Keluar Rumah',ar:'بِسْمِ اللَّهِ تَوَكَّلْتُ عَلَى اللَّهِ، وَلَا حَوْلَ وَلَا قُوَّةَ إِلَّا بِاللَّهِ',lat:'Bismillāh, tawakkaltu ‘alallāh, wa lā ḥaula wa lā quwwata illā billāh',arti:'Dengan nama Allah, aku bertawakal kepada Allah. Tidak ada daya dan kekuatan kecuali dengan pertolongan Allah.',sumber:'HR. Abu Dawud & Tirmidzi (dishahihkan Al-Albani)',audio:'audio/doa-keluar-rumah.mp3',tts:'Bismillah, tawakkaltu alallah, wa laa haula wa laa quwwata illaa billaah'},
+ {ic:'🚗',judul:'Naik Kendaraan',ar:'سُبْحَانَ الَّذِي سَخَّرَ لَنَا هَذَا وَمَا كُنَّا لَهُ مُقْرِنِينَ وَإِنَّا إِلَى رَبِّنَا لَمُنْقَلِبُونَ',lat:'Subḥānal-ladzī sakhkhara lanā hādzā wa mā kunnā lahu muqrinīn, wa innā ilā rabbinā lamunqalibūn',arti:'Maha Suci Allah yang menundukkan kendaraan ini bagi kami, padahal kami tidak mampu menguasainya. Dan kepada Tuhan kami, kami akan kembali.',sumber:'HR. Muslim',audio:'audio/doa-naik-kendaraan.mp3',tts:'Subhaanal ladzi sakhkhara lana haadza wa maa kunna lahu muqrinin, wa inna ilaa rabbina lamunqalibuun'},
+ {ic:'🤧',judul:'Saat Bersin',ar:'الْحَمْدُ لِلَّهِ',lat:'Alḥamdulillāh',arti:'Segala puji bagi Allah. Teman yang mendengar menjawab: Yarḥamukallāh (semoga Allah merahmatimu).',sumber:'HR. Bukhari',audio:'audio/doa-bersin.mp3',tts:'Alhamdulillah'}
+];
+/* >>> BAGIAN 2: DAFTAR NASYID / MUROTTAL.
+   - tipe 'audio': file mp3 milik sendiri/berizin di folder /audio/
+   - tipe 'yt'   : isi "id" dengan kode video YouTube (bagian setelah v= pada link). Pilih video nasyid tanpa musik / murottal anak,
+                   dan pastikan video mengizinkan embed. Contoh: {tipe:'yt',judul:'Nasyid ...',id:'XXXXXXXXXXX'} */
+const NASYID=[
+ {tipe:'audio',judul:'Murottal Al-Fatihah',src:'audio/murottal-al-fatihah.mp3'},
+ {tipe:'audio',judul:'Murottal Al-Ikhlas',src:'audio/murottal-al-ikhlas.mp3'},
+ {tipe:'audio',judul:'Murottal Al-Falaq',src:'audio/murottal-al-falaq.mp3'},
+ {tipe:'audio',judul:'Murottal An-Nas',src:'audio/murottal-an-nas.mp3'}
+];
+let curAudio=null, gateOk=false;
+function stopAudio(){if(curAudio){try{curAudio.pause()}catch(e){}curAudio=null}}
+function playFile(src,fallback){
+ stopAudio();if('speechSynthesis' in window)speechSynthesis.cancel();
+ let failed=false;const fail=()=>{if(!failed){failed=true;curAudio=null;fallback&&fallback()}};
+ const a=new Audio(src);curAudio=a;a.onerror=fail;const p=a.play();if(p&&p.catch)p.catch(fail)}
+function playDoa(d){
+ playFile(d.audio,()=>{
+  const v=('speechSynthesis' in window)?speechSynthesis.getVoices().find(x=>x.lang&&x.lang.toLowerCase().startsWith('ar')):null;
+  if(v){speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(d.ar);u.voice=v;u.lang=v.lang;u.rate=.7;speechSynthesis.speak(u)}
+  else speak(d.tts)})}
+function modDoa(mode='doa'){
+ clearTimers();stopAudio();
+ const top=tabs([['📿 Doa Harian',()=>modDoa('doa')],['🎬 Nasyid & Murottal',()=>modDoa('nasyid')]],mode==='nasyid'?1:0);
+ if(mode==='doa'){
+  const g=gridOf(2);g.style.maxWidth='560px';
+  DOA.forEach(d=>{const c=card(d.ic+' '+d.judul,()=>doaDetail(d));c.style.fontSize='1.25rem';c.style.minHeight='84px';g.appendChild(c)});
+  mount(top,bubble('Pilih doa yang ingin dipelajari!'),g,btn('🎯 Tebak Doa',doaTebak,'p'));
+ }else nasyidView(top)}
+function doaDetail(d){
+ const ar=el('div','ar',d.ar);
+ const act=document.createElement('div');
+ act.append(btn('🔊 Dengarkan',()=>playDoa(d),'g'),btn('⬅️ Kembali',()=>modDoa('doa'),'o'));
+ mount(bubble(d.ic+' '+d.judul),ar,el('div','latin',d.lat),el('div','arti','Artinya: '+d.arti),el('div','src','Sumber: '+d.sumber),act);
+ later(()=>playDoa(d),400)}
+function doaTebak(){
+ clearTimers();const t=pick(DOA);const opts=shuffle([t,...shuffle(DOA.filter(x=>x!==t)).slice(0,2)]);
+ const g=gridOf(1);g.style.maxWidth='420px';
+ opts.forEach(o=>{const c=card(o.ic+' '+o.judul,e=>{if(o===t){e.classList.add('ok');praise();later(doaTebak,2000)}else{e.classList.add('bad');setTimeout(()=>e.classList.remove('bad'),400);tryAgain()}});c.style.fontSize='1.4rem';g.appendChild(c)});
+ const act=document.createElement('div');act.append(btn('🔊 Dengar Lagi',()=>playDoa(t),'o'),btn('⬅️ Kembali',()=>modDoa('doa'),'r'));
+ mount(bubble('Dengarkan doa, kapan dibacanya?'),act,g);later(()=>playDoa(t),400)}
+function nasyidView(top){
+ if(!gateOk){
+  const a=rnd(6,9),b=rnd(4,9),ans=a+b;const box=document.createElement('div');box.className='gate';
+  box.innerHTML=`<b>Khusus orang tua/guru</b><div class="note">Jawab soal ini untuk membuka video dan audio:</div><div class="big" style="color:#B45309;border-color:#F59E0B">${a} + ${b} = ?</div>`;
+  const g=gridOf(4);[ans,ans+rnd(1,3),ans-rnd(1,3),ans+rnd(4,6)].filter((v,i,s)=>s.indexOf(v)===i).sort(()=>Math.random()-.5).forEach(v=>g.appendChild(card(v,e=>{if(v===ans){gateOk=true;modDoa('nasyid')}else{e.classList.add('bad');setTimeout(()=>e.classList.remove('bad'),400)}})));
+  box.appendChild(g);mount(top,box);return}
+ const els=[top,bubble('Nasyid tanpa musik & murottal')];
+ const list=NASYID.filter(n=>n.tipe==='yt'?n.id:n.src);
+ if(!list.length)els.push(el('div','note','Belum ada daftar. Tambahkan pada array NASYID di kode.'));
+ list.forEach(n=>{const m=document.createElement('div');m.className='media';m.appendChild(el('b','',(n.tipe==='yt'?'🎬 ':'🎧 ')+n.judul));
+  if(n.tipe==='yt'){const f=document.createElement('iframe');f.src='https://www.youtube-nocookie.com/embed/'+encodeURIComponent(n.id)+'?rel=0&modestbranding=1&playsinline=1';f.title=n.judul;f.allow='encrypted-media; picture-in-picture; fullscreen';f.allowFullscreen=true;f.loading='lazy';f.style.cssText='width:100%;aspect-ratio:16/9;border:0;border-radius:14px;margin-top:8px';m.appendChild(f)}
+  else{const a=document.createElement('audio');a.controls=true;a.preload='none';a.src=n.src;const msg=el('div','note','');a.onerror=()=>{msg.textContent='File audio belum ada di folder audio/.'};a.onplay=()=>{stopAudio();document.querySelectorAll('.media audio').forEach(x=>{if(x!==a)x.pause()});speechSynthesis&&speechSynthesis.cancel()};m.append(a,msg)}
+  els.push(m)});
+ mount(...els)}
 
 /* ============ MULAI ============ */
 welcome();
