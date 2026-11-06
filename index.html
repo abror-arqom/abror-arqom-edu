@@ -354,11 +354,15 @@ const DOA=[
    - tipe 'audio': file mp3 milik sendiri/berizin di folder /audio/
    - tipe 'yt'   : isi "id" dengan kode video YouTube (bagian setelah v= pada link). Pilih video nasyid tanpa musik / murottal anak,
                    dan pastikan video mengizinkan embed. Contoh: {tipe:'yt',judul:'Nasyid ...',id:'XXXXXXXXXXX'} */
+/* Murottal dari API. Ganti QARI jika ingin suara qari lain (cek daftar qari di docs.islamic.app).
+   Untuk API/server lain, ubah isi fungsi ini saja. */
+const QARI='ar.alafasy';
+const quranAudio=n=>`https://api.islamic.app/v1/audio/surah/${QARI}/${n}`;
 const NASYID=[
- {tipe:'audio',judul:'Murottal Al-Fatihah',src:'audio/murottal-al-fatihah.mp3'},
- {tipe:'audio',judul:'Murottal Al-Ikhlas',src:'audio/murottal-al-ikhlas.mp3'},
- {tipe:'audio',judul:'Murottal Al-Falaq',src:'audio/murottal-al-falaq.mp3'},
- {tipe:'audio',judul:'Murottal An-Nas',src:'audio/murottal-an-nas.mp3'}
+ {tipe:'audio',judul:'Murottal Al-Fatihah',src:quranAudio(1)},
+ {tipe:'audio',judul:'Murottal Al-Ikhlas',src:quranAudio(112)},
+ {tipe:'audio',judul:'Murottal Al-Falaq',src:quranAudio(113)},
+ {tipe:'audio',judul:'Murottal An-Nas',src:quranAudio(114)}
 ];
 let curAudio=null, gateOk=false;
 function stopAudio(){if(curAudio){try{curAudio.pause()}catch(e){}curAudio=null}}
@@ -402,7 +406,7 @@ function nasyidView(top){
  if(!list.length)els.push(el('div','note','Belum ada daftar. Tambahkan pada array NASYID di kode.'));
  list.forEach(n=>{const m=document.createElement('div');m.className='media';m.appendChild(el('b','',(n.tipe==='yt'?'🎬 ':'🎧 ')+n.judul));
   if(n.tipe==='yt'){const f=document.createElement('iframe');f.src='https://www.youtube-nocookie.com/embed/'+encodeURIComponent(n.id)+'?rel=0&modestbranding=1&playsinline=1';f.title=n.judul;f.allow='encrypted-media; picture-in-picture; fullscreen';f.allowFullscreen=true;f.loading='lazy';f.style.cssText='width:100%;aspect-ratio:16/9;border:0;border-radius:14px;margin-top:8px';m.appendChild(f)}
-  else{const a=document.createElement('audio');a.controls=true;a.preload='none';a.src=n.src;const msg=el('div','note','');a.onerror=()=>{msg.textContent='File audio belum ada di folder audio/.'};a.onplay=()=>{stopAudio();document.querySelectorAll('.media audio').forEach(x=>{if(x!==a)x.pause()});speechSynthesis&&speechSynthesis.cancel()};m.append(a,msg)}
+  else{const a=document.createElement('audio');a.controls=true;a.preload='none';a.src=n.src;const msg=el('div','note','');a.onerror=()=>{msg.textContent='Audio belum bisa dimuat. Cek koneksi internet atau alamat audionya.'};a.onplay=()=>{stopAudio();document.querySelectorAll('.media audio').forEach(x=>{if(x!==a)x.pause()});speechSynthesis&&speechSynthesis.cancel()};m.append(a,msg)}
   els.push(m)});
  mount(...els)}
 
