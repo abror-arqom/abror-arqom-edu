@@ -1,896 +1,336 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Game Edukasi Abror & Arqom</title>
-    <!-- Import Font Google Elegan, Playful & Modern -->
-    <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,700;1,700&family=Fredoka:wght@600;700;800;900&family=Plus+Jakarta+Sans:wght@700;800;900&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --lumia-red: #FF4757;
-            --lumia-orange: #FF7F50;
-            --lumia-yellow: #FFA502;
-            --lumia-green: #2ED573;
-            --lumia-blue: #1E90FF;
-            --lumia-purple: #8E44AD;
-            --lumia-dark: #0F172A;
-            --lumia-card-bg: rgba(255, 255, 255, 0.96);
-        }
-
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: 'Fredoka', 'Plus Jakarta Sans', sans-serif;
-            user-select: none;
-        }
-
-        body {
-            background-color: var(--lumia-dark);
-            background-image: radial-gradient(rgba(255, 255, 255, 0.08) 2px, transparent 2px);
-            background-size: 24px 24px;
-            color: white;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 25px 15px;
-        }
-
-        header {
-            text-align: center;
-            margin-bottom: 25px;
-        }
-
-        h1 {
-            font-family: 'Fredoka', sans-serif;
-            font-size: 2.8rem;
-            font-weight: 900;
-            background: linear-gradient(180deg, #FFE17D 0%, #FFB703 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-            filter: drop-shadow(0px 4px 10px rgba(255, 183, 3, 0.3));
-            line-height: 1.1;
-        }
-
-        p.subtitle {
-            font-size: 1rem;
-            color: #94A3B8;
-            font-weight: 700;
-            margin-top: 6px;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-        }
-
-        /* MENU METRO TILES */
-        .menu-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
-            gap: 16px;
-            width: 100%;
-            max-width: 880px;
-            margin-bottom: 25px;
-        }
-
-        .tile {
-            padding: 18px 10px;
-            border-radius: 22px;
-            text-align: center;
-            cursor: pointer;
-            transition: all 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            box-shadow: 0 8px 20px rgba(0,0,0,0.3);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            min-height: 115px;
-            border: 2px solid rgba(255, 255, 255, 0.2);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .tile::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; right: 0; height: 40%;
-            background: linear-gradient(180deg, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0) 100%);
-            pointer-events: none;
-        }
-
-        .tile:hover {
-            transform: translateY(-6px) scale(1.02);
-            box-shadow: 0 14px 28px rgba(0,0,0,0.4);
-            border-color: #FFFFFF;
-        }
-
-        .tile:active {
-            transform: translateY(2px);
-            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-        }
-
-        .tile i {
-            font-size: 2.6rem;
-            margin-bottom: 6px;
-            font-style: normal;
-            filter: drop-shadow(0px 4px 6px rgba(0,0,0,0.25));
-        }
-
-        .tile span {
-            font-size: 0.95rem;
-            font-weight: 800;
-            line-height: 1.2;
-            color: #FFFFFF;
-            letter-spacing: 0.3px;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
-        }
-
-        .tile-red    { background: linear-gradient(135deg, #FF3366, #E81123); border-color: #FF708F; }
-        .tile-orange { background: linear-gradient(135deg, #FF6B00, #D95300); border-color: #FF9E59; }
-        .tile-yellow { background: linear-gradient(135deg, #FFB800, #E69500); border-color: #FFE082; }
-        .tile-green  { background: linear-gradient(135deg, #10B981, #059669); border-color: #6EE7B7; }
-        .tile-blue   { background: linear-gradient(135deg, #0078D4, #005A9E); border-color: #60A5FA; }
-        .tile-purple { background: linear-gradient(135deg, #8B5CF6, #6D28D9); border-color: #C4B5FD; }
-
-        /* WADAH PERMAINAN */
-        .game-container {
-            background-color: var(--lumia-card-bg);
-            background-image: radial-gradient(#CBD5E1 2px, transparent 2px);
-            background-size: 22px 22px;
-            color: #1E293B;
-            width: 100%;
-            max-width: 880px;
-            border-radius: 28px;
-            padding: 30px 24px;
-            min-height: 490px;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            position: relative;
-            overflow: hidden;
-            border: 4px solid rgba(255, 255, 255, 0.8);
-        }
-
-        .game-screen {
-            display: none;
-            width: 100%;
-            text-align: center;
-            animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
-
-        .game-screen.active {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-
-        @keyframes popIn {
-            from { opacity: 0; transform: scale(0.92); }
-            to { opacity: 1; transform: scale(1); }
-        }
-
-        .btn {
-            background: linear-gradient(135deg, #3B82F6, #1D4ED8);
-            color: white;
-            border: none;
-            padding: 12px 26px;
-            font-size: 1.05rem;
-            font-weight: 800;
-            border-radius: 50px;
-            cursor: pointer;
-            box-shadow: 0 5px 0px #1E40AF, 0 6px 12px rgba(0,0,0,0.15);
-            margin: 6px;
-            transition: all 0.15s ease;
-        }
-
-        .btn:hover { filter: brightness(1.1); transform: translateY(-2px); }
-        .btn:active { transform: translateY(2px); box-shadow: 0 2px 0px #1E40AF; }
-        .btn-green { background: linear-gradient(135deg, #10B981, #047857); box-shadow: 0 5px 0px #065F46; }
-        .btn-orange { background: linear-gradient(135deg, #F59E0B, #D97706); box-shadow: 0 5px 0px #B45309; }
-        .btn-purple { background: linear-gradient(135deg, #8B5CF6, #6D28D9); box-shadow: 0 5px 0px #5B21B6; }
-
-        .sub-menu-bar {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 20px;
-            flex-wrap: wrap;
-            justify-content: center;
-        }
-
-        .grid-cards {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(90px, 1fr));
-            gap: 14px;
-            width: 100%;
-            margin-top: 15px;
-        }
-
-        .card-item {
-            background: #FFFFFF;
-            border: 4px solid #94A3B8;
-            border-radius: 20px;
-            padding: 15px 5px;
-            font-size: 2.2rem;
-            font-weight: 800;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 6px 0px #64748B, 0 8px 15px rgba(0,0,0,0.08);
-        }
-
-        .card-item:hover {
-            border-color: #3B82F6;
-            transform: translateY(-4px);
-            background: #EFF6FF;
-        }
-
-        .card-item:active { transform: translateY(3px); box-shadow: none; }
-
-        .vehicle-card-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 18px;
-            width: 100%;
-            max-width: 500px;
-            margin-top: 15px;
-        }
-
-        .card-vehicle-img {
-            background: #FFFFFF;
-            border: 4px solid #3B82F6;
-            border-radius: 24px;
-            height: 140px;
-            font-size: 5.5rem;
-            cursor: pointer;
-            transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 8px 0px #2563EB, 0 10px 18px rgba(0,0,0,0.12);
-        }
-
-        .card-vehicle-img:nth-child(1) { border-color: var(--lumia-red); box-shadow: 0 8px 0px #D63031; }
-        .card-vehicle-img:nth-child(2) { border-color: var(--lumia-green); box-shadow: 0 8px 0px #20BF6B; }
-        .card-vehicle-img:nth-child(3) { border-color: var(--lumia-orange); box-shadow: 0 8px 0px #FA8231; }
-        .card-vehicle-img:nth-child(4) { border-color: var(--lumia-purple); box-shadow: 0 8px 0px #8854D0; }
-
-        .card-vehicle-img:hover {
-            transform: translateY(-5px) scale(1.03);
-            background: #F8FAFC;
-        }
-
-        .card-vehicle-img:active {
-            transform: translateY(3px);
-            box-shadow: 0 2px 0px rgba(0,0,0,0.2);
-        }
-
-        .hijaiyah-grid-custom {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(105px, 1fr));
-            gap: 14px;
-            width: 100%;
-            max-height: 340px;
-            overflow-y: auto;
-            padding: 12px;
-            direction: rtl;
-        }
-
-        .card-hijaiyah {
-            background: #FFFFFF;
-            border: 4px solid var(--lumia-yellow);
-            border-radius: 22px;
-            height: 130px;
-            font-family: 'Amiri', serif;
-            font-size: 3.2rem;
-            font-weight: 700;
-            color: #0F172A;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 7px 0px #D4AC0D, 0 8px 15px rgba(0,0,0,0.08);
-            padding-top: 10px;
-            box-sizing: border-box;
-            line-height: 1;
-        }
-
-        .card-hijaiyah:nth-child(4n+1) { border-color: var(--lumia-red); box-shadow: 0 7px 0px #D63031; color: var(--lumia-red); }
-        .card-hijaiyah:nth-child(4n+2) { border-color: var(--lumia-blue); box-shadow: 0 7px 0px #2563EB; color: var(--lumia-blue); }
-        .card-hijaiyah:nth-child(4n+3) { border-color: var(--lumia-green); box-shadow: 0 7px 0px #20BF6B; color: var(--lumia-green); }
-        .card-hijaiyah:nth-child(4n+4) { border-color: var(--lumia-purple); box-shadow: 0 7px 0px #8854D0; color: var(--lumia-purple); }
-
-        .card-hijaiyah:hover {
-            transform: translateY(-4px) scale(1.04);
-            background: #FFFBEB;
-        }
-
-        .card-hijaiyah:active {
-            transform: translateY(3px);
-            box-shadow: none;
-        }
-
-        .puzzle-box {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            width: 100%;
-            gap: 25px;
-            margin-top: 15px;
-            flex-wrap: wrap;
-        }
-
-        .puzzle-target-container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            background: #FFFFFF;
-            padding: 16px;
-            border-radius: 22px;
-            border: 4px dashed #94A3B8;
-        }
-
-        .puzzle-shadow {
-            width: 120px;
-            height: 120px;
-            border-radius: 18px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 4.8rem;
-            background: #E2E8F0;
-            filter: grayscale(100%) opacity(0.25);
-        }
-
-        .memory-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 14px;
-            max-width: 400px;
-            margin-top: 10px;
-        }
-
-        .mem-card {
-            width: 80px;
-            height: 80px;
-            background: linear-gradient(135deg, #3B82F6, #1D4ED8);
-            border-radius: 18px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 2.3rem;
-            cursor: pointer;
-            color: white;
-            box-shadow: 0 5px 0 #1E40AF;
-            font-weight: 800;
-        }
-
-        .mem-card.flipped {
-            background: #FFFFFF;
-            border: 4px solid #3B82F6;
-            color: #333;
-            box-shadow: 0 5px 0 #CBD5E1;
-        }
-
-        .score-badge {
-            position: absolute;
-            top: 18px;
-            right: 20px;
-            background: linear-gradient(135deg, #FFD700, #FFA502);
-            color: #0F172A;
-            font-weight: 800;
-            padding: 8px 18px;
-            border-radius: 50px;
-            font-size: 1rem;
-            box-shadow: 0 4px 0px #D97706;
-            border: 2px solid #FFF;
-        }
-
-        .speech-bubble {
-            background: #FFFFFF;
-            padding: 12px 24px;
-            border-radius: 25px;
-            font-size: 1.25rem;
-            font-weight: 800;
-            color: #0F172A;
-            margin-bottom: 12px;
-            border: 3px solid #CBD5E1;
-            box-shadow: 0 5px 0px #94A3B8;
-        }
-
-        .math-question {
-            font-size: 3rem;
-            font-weight: 800;
-            color: #8B5CF6;
-            margin: 15px 0;
-            background: #FFFFFF;
-            padding: 10px 30px;
-            border-radius: 20px;
-            border: 3px solid #DDD6FE;
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Game Edukasi Abror & Arqom</title>
+<link href="https://fonts.googleapis.com/css2?family=Amiri:wght@700&family=Fredoka:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--red:#FF4757;--orange:#FF7F50;--yellow:#FFA502;--green:#2ED573;--blue:#1E90FF;--purple:#8E44AD;--dark:#0F172A;--ink:#1E293B}
+*{box-sizing:border-box;margin:0;padding:0;font-family:'Fredoka','Trebuchet MS',sans-serif;user-select:none;-webkit-tap-highlight-color:transparent}
+body{background:var(--dark) radial-gradient(rgba(255,255,255,.08) 2px,transparent 2px) 0 0/24px 24px;color:#fff;min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:22px 14px}
+header{text-align:center;margin-bottom:18px}
+h1{font-size:clamp(1.9rem,6vw,2.8rem);font-weight:700;background:linear-gradient(180deg,#FFE17D,#FFB703);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;letter-spacing:1px;text-transform:uppercase;line-height:1.1}
+.subtitle{font-size:.95rem;color:#94A3B8;font-weight:600;margin-top:6px}
+.menu-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(118px,1fr));gap:12px;width:100%;max-width:900px;margin-bottom:20px}
+.tile{padding:14px 8px;border-radius:22px;text-align:center;cursor:pointer;transition:transform .2s,box-shadow .2s;box-shadow:0 8px 18px rgba(0,0,0,.3);display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:108px;border:2px solid rgba(255,255,255,.25);position:relative;overflow:hidden;color:#fff;font-weight:600}
+.tile::before{content:'';position:absolute;inset:0 0 60%;background:linear-gradient(180deg,rgba(255,255,255,.22),transparent);pointer-events:none}
+.tile:hover{transform:translateY(-5px)}.tile:active{transform:translateY(2px)}
+.tile.on{border-color:#fff;box-shadow:0 0 0 4px rgba(255,255,255,.35),0 8px 18px rgba(0,0,0,.3)}
+.tile i{font-size:2.3rem;font-style:normal;margin-bottom:4px}
+.tile span{font-size:.9rem;line-height:1.15;text-shadow:0 2px 4px rgba(0,0,0,.3)}
+.tile small{font-size:.66rem;background:rgba(0,0,0,.28);padding:2px 8px;border-radius:20px;margin-top:5px}
+.c-red{background:linear-gradient(135deg,#FF3366,#E81123)}.c-orange{background:linear-gradient(135deg,#FF6B00,#D95300)}.c-yellow{background:linear-gradient(135deg,#FFB800,#E69500)}.c-green{background:linear-gradient(135deg,#10B981,#059669)}.c-blue{background:linear-gradient(135deg,#0078D4,#005A9E)}.c-purple{background:linear-gradient(135deg,#8B5CF6,#6D28D9)}.c-pink{background:linear-gradient(135deg,#EC4899,#BE185D)}.c-teal{background:linear-gradient(135deg,#14B8A6,#0F766E)}
+.game-container{background:rgba(255,255,255,.96) radial-gradient(#CBD5E1 2px,transparent 2px) 0 0/22px 22px;color:var(--ink);width:100%;max-width:900px;border-radius:28px;padding:62px 18px 26px;min-height:500px;box-shadow:0 20px 40px rgba(0,0,0,.4);position:relative;border:4px solid rgba(255,255,255,.85)}
+.score-badge{position:absolute;top:14px;right:16px;background:linear-gradient(135deg,#FFD700,#FFA502);color:var(--dark);font-weight:700;padding:7px 16px;border-radius:50px;box-shadow:0 4px 0 #D97706;border:2px solid #fff}
+.pill{position:absolute;top:14px;left:16px;background:#fff;border:3px solid #CBD5E1;border-radius:50px;padding:5px 14px;font-weight:700;font-size:.85rem;color:#475569;max-width:55%}
+#stage{display:flex;flex-direction:column;align-items:center;text-align:center;width:100%;animation:pop .3s ease}
+@keyframes pop{from{opacity:0;transform:scale(.94)}to{opacity:1;transform:none}}
+.bubble{background:#fff;padding:10px 22px;border-radius:25px;font-size:1.2rem;font-weight:700;margin:4px 0 12px;border:3px solid #CBD5E1;box-shadow:0 5px 0 #94A3B8}
+.btn{background:linear-gradient(135deg,#3B82F6,#1D4ED8);color:#fff;border:none;padding:11px 22px;font-size:1rem;font-weight:700;border-radius:50px;cursor:pointer;box-shadow:0 5px 0 #1E40AF;margin:5px;transition:transform .12s}
+.btn:active{transform:translateY(3px);box-shadow:0 2px 0 #1E40AF}.btn:focus-visible,.tile:focus-visible{outline:4px solid #FDE047}
+.btn.g{background:linear-gradient(135deg,#10B981,#047857);box-shadow:0 5px 0 #065F46}.btn.o{background:linear-gradient(135deg,#F59E0B,#D97706);box-shadow:0 5px 0 #B45309}.btn.p{background:linear-gradient(135deg,#8B5CF6,#6D28D9);box-shadow:0 5px 0 #5B21B6}.btn.r{background:linear-gradient(135deg,#F43F5E,#BE123C);box-shadow:0 5px 0 #9F1239}.btn.off{opacity:.55}
+.tabs{display:flex;flex-wrap:wrap;justify-content:center;margin-bottom:8px}
+.grid{display:grid;gap:12px;width:100%;margin-top:10px;justify-content:center}
+.card{background:#fff;border:4px solid #94A3B8;border-radius:20px;min-height:74px;font-size:2rem;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 6px 0 #64748B;transition:transform .15s;padding:6px}
+.card:hover{transform:translateY(-3px);background:#EFF6FF}.card:active{transform:translateY(3px);box-shadow:none}
+.card.ok{border-color:#10B981;box-shadow:0 6px 0 #059669;background:#ECFDF5}.card.bad{animation:shake .35s}
+@keyframes shake{25%{transform:translateX(-7px)}75%{transform:translateX(7px)}}
+.hj{font-family:'Amiri',serif;font-size:3.3rem;min-height:116px;line-height:1.5;padding-top:12px}
+.hj:nth-child(4n+1){border-color:var(--red);box-shadow:0 7px 0 #D63031;color:var(--red)}.hj:nth-child(4n+2){border-color:var(--blue);box-shadow:0 7px 0 #2563EB;color:var(--blue)}.hj:nth-child(4n+3){border-color:var(--green);box-shadow:0 7px 0 #20BF6B;color:#16A34A}.hj:nth-child(4n){border-color:var(--purple);box-shadow:0 7px 0 #8854D0;color:var(--purple)}
+.big{font-size:3.4rem;font-weight:700;color:#7C3AED;background:#fff;border:3px solid #DDD6FE;border-radius:20px;padding:6px 26px;margin:8px 0}
+.objs{font-size:2rem;background:#fff;border:3px dashed #94A3B8;border-radius:18px;padding:8px 14px;margin:6px;line-height:1.3;max-width:300px}
+.row{display:flex;flex-wrap:wrap;gap:14px;justify-content:center;align-items:center}
+.shadow{width:120px;height:120px;border-radius:18px;display:flex;align-items:center;justify-content:center;font-size:4.8rem;background:#E2E8F0;filter:grayscale(1) brightness(.2) opacity(.35);border:4px dashed #94A3B8}
+.mem{width:70px;height:70px;border-radius:16px;background:linear-gradient(135deg,#3B82F6,#1D4ED8);color:#fff;display:flex;align-items:center;justify-content:center;font-size:2.1rem;cursor:pointer;box-shadow:0 5px 0 #1E40AF}
+.mem.f{background:#fff;border:4px solid #3B82F6;box-shadow:0 5px 0 #CBD5E1}
+.sw{width:46px;height:46px;border-radius:50%;border:4px solid #fff;box-shadow:0 0 0 3px #94A3B8;cursor:pointer}.sw.on{box-shadow:0 0 0 5px #0F172A;transform:scale(1.12)}
+svg.art{width:100%;max-width:420px;background:#fff;border-radius:20px;border:3px solid #CBD5E1}.art .r{fill:#fff;stroke:#0F172A;stroke-width:4;stroke-linejoin:round;cursor:pointer}
+.cell{width:62px;height:62px;border-radius:12px;border:3px solid #CBD5E1;background:#fff;display:flex;align-items:center;justify-content:center;font-size:2rem}
+.mz{display:grid;gap:6px;background:#E2E8F0;padding:8px;border-radius:18px}
+.blk{width:50px;height:50px;border-radius:12px;background:#fff;border:3px solid #6D28D9;font-size:1.6rem;display:flex;align-items:center;justify-content:center;cursor:pointer;color:#6D28D9;font-weight:700}
+.blk.sel{background:#FEF3C7;border-color:#F59E0B}.blk.err{background:#FEE2E2;border-color:#DC2626;color:#DC2626}
+.tray{min-height:62px;background:#fff;border:3px dashed #A78BFA;border-radius:16px;padding:6px;display:flex;flex-wrap:wrap;gap:6px;justify-content:center;align-items:center;max-width:520px;width:100%;margin:8px 0}
+.seq{position:relative;min-width:120px;min-height:100px;flex-direction:column;font-size:2.4rem;gap:2px}.seq small{font-size:.85rem;font-weight:600}
+.seq b{position:absolute;top:-10px;left:-8px;background:#10B981;color:#fff;border-radius:50%;width:30px;height:30px;font-size:1rem;display:flex;align-items:center;justify-content:center}
+.scene{width:100%;max-width:520px;border-radius:22px;border:3px solid #CBD5E1;padding:14px;transition:background .4s;position:relative}
+.note{font-size:.95rem;font-weight:600;color:#475569;margin:4px 0;max-width:520px}
+@media(max-width:520px){.hj{font-size:2.7rem;min-height:96px}.cell{width:54px;height:54px}.score-badge{font-size:.85rem;padding:5px 11px}}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
 </head>
 <body>
+<header>
+<h1>Abror &amp; Arqom</h1>
+<p class="subtitle">Game Edukasi Interaktif Anak TK</p>
+</header>
+<nav class="menu-grid" id="menu" aria-label="Menu permainan"></nav>
+<main class="game-container">
+<div class="pill" id="pill">Selamat datang!</div>
+<div class="score-badge" id="score">Bintang: ⭐ 0</div>
+<div id="stage"></div>
+</main>
 
-    <header>
-        <h1>ABROR & ARQOM</h1>
-        <p class="subtitle">Game Edukasi Interaktif Anak TK</p>
-    </header>
+<script>
+/* ============ UTILITAS ============ */
+const $=s=>document.querySelector(s), shuffle=a=>[...a].sort(()=>Math.random()-.5), pick=a=>a[Math.floor(Math.random()*a.length)], rnd=(a,b)=>a+Math.floor(Math.random()*(b-a+1));
+let score=0, timers=[], activeId=null, greeted=false;
+const later=(fn,ms)=>{const t=setTimeout(fn,ms);timers.push(t);return t};
+const clearTimers=()=>{timers.forEach(clearTimeout);timers=[]};
+const stage=$('#stage');
+const AC=window.AudioContext||window.webkitAudioContext; const ctx=AC?new AC():null;
+function tone(f,type,d,delay=0){if(!ctx)return;setTimeout(()=>{try{ctx.resume();const o=ctx.createOscillator(),g=ctx.createGain();o.type=type;o.frequency.value=f;g.gain.value=.15;o.connect(g);g.connect(ctx.destination);g.gain.exponentialRampToValueAtTime(.0001,ctx.currentTime+d);o.start();o.stop(ctx.currentTime+d)}catch(e){}},delay)}
+const sfxOk=()=>{tone(523,'triangle',.15);tone(659,'triangle',.2,150);tone(784,'triangle',.3,300)};
+const sfxBad=()=>{tone(220,'sawtooth',.2);tone(180,'sawtooth',.3,200)};
+const sfxTap=()=>tone(660,'sine',.08);
+let voice=null;
+function loadVoice(){const v=speechSynthesis.getVoices();voice=v.find(x=>x.lang==='id-ID')||v.find(x=>x.lang&&x.lang.startsWith('id'))||null}
+if('speechSynthesis' in window){loadVoice();speechSynthesis.onvoiceschanged=loadVoice}
+function speak(t,cb){if(!('speechSynthesis' in window)){cb&&cb();return}
+ speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(t);u.lang='id-ID';if(voice)u.voice=voice;u.rate=.85;u.pitch=1.15;if(cb)u.onend=cb;speechSynthesis.speak(u)}
+function praise(){score+=10;$('#score').textContent='Bintang: ⭐ '+score;sfxOk();speak(pick(['Kamu hebat!','Abror hebat!','Arqom hebat!','Pintar sekali!','Luar biasa!','Jawaban kamu benar!']))}
+function tryAgain(msg){sfxBad();speak(msg||'Ayo coba lagi ya!')}
+const h=(html)=>{stage.innerHTML=html;stage.style.animation='none';stage.offsetHeight;stage.style.animation=''};
+const btn=(label,fn,cls='')=>{const b=document.createElement('button');b.className='btn '+cls;b.textContent=label;b.onclick=()=>{sfxTap();fn()};return b};
+function tabs(list,activeIdx){const d=document.createElement('div');d.className='tabs';list.forEach(([l,f,c],i)=>d.appendChild(btn(l,f,c||(i===activeIdx?'':'off'))));return d}
+function bubble(text){const b=document.createElement('div');b.className='bubble';b.textContent=text;return b}
+function gridOf(cols,cls=''){const g=document.createElement('div');g.className='grid '+cls;g.style.gridTemplateColumns=`repeat(${cols},minmax(0,1fr))`;return g}
+function card(txt,fn,cls=''){const c=document.createElement('div');c.className='card '+cls;c.textContent=txt;c.onclick=()=>{fn(c)};c.setAttribute('role','button');return c}
+function mount(...els){stage.innerHTML='';els.forEach(e=>stage.appendChild(e));stage.style.animation='none';stage.offsetHeight;stage.style.animation=''}
 
-    <!-- MENU METRO TILES -->
-    <div class="menu-grid">
-        <div class="tile tile-red" onclick="switchGame('kendaraan')">
-            <i>🚗</i>
-            <span>Tebak Kendaraan</span>
-        </div>
-        <div class="tile tile-orange" onclick="switchGame('puzzle')">
-            <i>🧩</i>
-            <span>Puzzle Shape</span>
-        </div>
-        <div class="tile tile-yellow" onclick="switchGame('hijaiyah')">
-            <i>🌙</i>
-            <span>Hijaiyyah (A-Ya)</span>
-        </div>
-        <div class="tile tile-green" onclick="switchGame('angka')">
-            <i>🔢</i>
-            <span>Angka & Berhitung</span>
-        </div>
-        <div class="tile tile-blue" onclick="switchGame('alphabet')">
-            <i>🔤</i>
-            <span>Alphabet A-Z</span>
-        </div>
-        <div class="tile tile-purple" onclick="switchGame('asahOtak')">
-            <i>🧠</i>
-            <span>Asah Otak</span>
-        </div>
-    </div>
+/* ============ MENU ============ */
+const MODS=[
+ ['hijaiyah','🌙','Hijaiyyah Fathah','c-yellow','',modHijaiyah],
+ ['suku','📖','Membaca & Mengeja','c-pink','',modSuku],
+ ['angka','🔢','Angka & Berhitung','c-green','',modAngka],
+ ['warna','🎨','Mewarnai','c-red','',modWarna],
+ ['balok','🧱','Susun Balok','c-orange','Algoritma',modBalok],
+ ['kendaraan','🚗','Puzzle & Tebak Kendaraan','c-blue','',modKendaraan],
+ ['abc','🔤','Alphabet & Asah Otak','c-purple','',modAbc],
+ ['urutan','🪥','Urutan Kegiatan','c-teal','Urutan',modUrutan],
+ ['sebab','💡','Sebab & Akibat','c-yellow','Sebab-Akibat',modSebab],
+ ['robot','🤖','Robot Cari Jalan','c-green','Algoritma',()=>modMaze('algo')],
+ ['debug','🔧','Perbaiki Robot','c-red','Debugging',()=>modMaze('debug')]
+];
+const menu=$('#menu');
+MODS.forEach(([id,ic,label,col,chip,fn])=>{
+ const t=document.createElement('div');t.className='tile '+col;t.id='tile-'+id;t.tabIndex=0;t.setAttribute('role','button');
+ t.innerHTML=`<i>${ic}</i><span>${label}</span>${chip?`<small>${chip}</small>`:''}`;
+ const go=()=>openMod(id);t.onclick=go;t.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();go()}};menu.appendChild(t)});
+function openMod(id){
+ if(ctx)ctx.resume();clearTimers();if('speechSynthesis' in window)speechSynthesis.cancel();
+ activeId=id;document.querySelectorAll('.tile').forEach(t=>t.classList.toggle('on',t.id==='tile-'+id));
+ const m=MODS.find(x=>x[0]===id);$('#pill').textContent=m[1]+' '+m[2];m[5]();
+ $('.game-container').scrollIntoView({behavior:'smooth',block:'start'})}
+function welcome(){
+ $('#pill').textContent='Selamat datang!';
+ const w=document.createElement('div');
+ w.innerHTML='<h2 style="color:#2563EB;font-size:1.7rem;margin-bottom:8px">Pilih Permainan di Atas!</h2><p style="font-size:1.1rem;color:#475569;font-weight:600;margin-bottom:14px">Halo Abror &amp; Arqom, mari belajar dan bermain bersama!</p><div style="font-size:3.2rem;margin-bottom:10px">🚗 🧩 🌙 🔢 🎨 🧱 🤖</div>';
+ w.appendChild(btn('🔊 Sapaan Abror & Arqom',()=>speak('Selamat datang di game edukasi Abror dan Arqom! Mari kita mulai bermain!'),'g'));
+ mount(w)}
+window.addEventListener('pointerdown',()=>{if(!greeted){greeted=true;if(ctx)ctx.resume()}},{once:true});
 
-    <!-- WADAH PERMAINAN -->
-    <div class="game-container">
-        <div class="score-badge" id="scoreDisplay">Bintang: ⭐ 0</div>
+/* ============ 1. HIJAIYYAH ============ */
+const F='\u064E';
+const HJ=[['أ','A','Aa'],['ب','Ba','Ba'],['ت','Ta','Ta'],['ث','Tsa','Tsa'],['ج','Ja','Ja'],['ح','Ha','Ha'],['خ','Kho','Kho'],['د','Da','Da'],['ذ','Dza','Dzaa'],['ر','Ro','Ro'],['ز','Za','Za'],['س','Sa','Sa'],['ش','Sya','Syaa'],['ص','Sho','Sho'],['ض','Dho','Dho'],['ط','Tho','Tho'],['ظ','Zho','Zho'],['ع',"'A",'Aa'],['غ','Gho','Gho'],['ف','Fa','Fa'],['ق','Qo','Qo'],['ك','Ka','Ka'],['ل','La','La'],['م','Ma','Ma'],['ن','Na','Na'],['ه','Ha','Ha'],['و','Wa','Wa'],['ي','Ya','Ya']];
+let hjTarget=null;
+function modHijaiyah(mode='belajar'){
+ clearTimers();const g=gridOf(4,'');g.style.direction='rtl';g.style.maxWidth='620px';
+ const top=tabs([['👆 Belajar',()=>modHijaiyah('belajar')],['🎯 Tebak Huruf',()=>modHijaiyah('tebak')]],mode==='belajar'?0:1);
+ const els=[top];
+ if(mode==='tebak'){hjTarget=pick(HJ);const b=bubble(`Mana huruf ${hjTarget[1]}?`);els.push(b,btn('🔊 Ulangi Suara',()=>speak(`Mana huruf ${hjTarget[2]}?`),'o'));later(()=>speak(`Mana huruf ${hjTarget[2]}?`),300)}
+ else els.push(bubble('Sentuh huruf untuk mendengar bunyinya!'));
+ HJ.forEach(it=>{const c=card(it[0]+F,el=>{
+  if(mode==='belajar'){speak(it[2]);return}
+  if(it[1]===hjTarget[1]){el.classList.add('ok');praise();later(()=>modHijaiyah('tebak'),1800)}else{el.classList.add('bad');setTimeout(()=>el.classList.remove('bad'),400);tryAgain()}},'hj');g.appendChild(c)});
+ els.push(g);mount(...els);
+}
 
-        <!-- Welcome Screen -->
-        <div id="screen-welcome" class="game-screen active">
-            <h2 style="color: #2563EB; margin-bottom: 10px; font-size: 1.8rem; font-weight: 800;">Pilih Permainan di Atas!</h2>
-            <p style="margin-bottom: 20px; font-size: 1.1rem; color: #475569; font-weight: 700;">Halo Abror & Arqom, mari belajar dan bermain bersama!</p>
-            <button class="btn btn-green" onclick="speakText('Selamat datang di game challenge Abror dan Arqom! Mari kita mulai bermain!')">🔊 Sapaan Abror & Arqom</button>
-        </div>
+/* ============ 2. MEMBACA & MENGEJA ============ */
+const WORDS=[['ba','bu'],['ca','ci'],['la','lu'],['bu','ku'],['ma','ta'],['sa','pi'],['ka','ki'],['to','pi'],['ba','ju'],['si','ku'],['me','ja'],['ba','tu']];
+function modSuku(mode='baca'){
+ clearTimers();const top=tabs([['📖 Eja Kata',()=>modSuku('baca')],['🎯 Tebak Suku Kata',()=>modSuku('tebak')]],mode==='baca'?0:1);
+ if(mode==='baca'){
+  const g=gridOf(3);g.style.maxWidth='620px';
+  WORDS.forEach(w=>{const c=document.createElement('div');c.className='card';c.style.fontSize='1.7rem';c.style.gap='6px';c.style.flexWrap='wrap';
+   w.forEach((s,i)=>{const sp=document.createElement('span');sp.textContent=s+(i?'':' -');sp.style.color=i?'#DC2626':'#2563EB';sp.style.padding='0 3px';c.appendChild(sp)});
+   c.onclick=()=>{const sp=c.querySelectorAll('span');const word=w.join('');
+    const run=(i)=>{if(i<2){sp[i].style.transform='scale(1.4)';speak(w[i],()=>{sp[i].style.transform='';run(i+1)})}else speak(word)};run(0)};
+   g.appendChild(c)});
+  mount(top,bubble('Sentuh kata, dengarkan ejaannya!'),g);
+ }else{
+  const syl=[...new Set(WORDS.flat())];const t=pick(syl);const opts=shuffle([t,...shuffle(syl.filter(s=>s!==t)).slice(0,3)]);
+  const g=gridOf(2);g.style.maxWidth='420px';
+  opts.forEach(o=>{const c=card(o,el=>{speak(o);if(o===t){el.classList.add('ok');praise();later(()=>modSuku('tebak'),1800)}else{el.classList.add('bad');setTimeout(()=>el.classList.remove('bad'),400);later(()=>tryAgain(),700)}});c.style.fontSize='2.8rem';c.style.minHeight='100px';g.appendChild(c)});
+  mount(top,bubble(`Mana suku kata "${t}"?`),btn('🔊 Ulangi Suara',()=>speak(`Mana suku kata ${t}?`),'o'),g);later(()=>speak(`Mana suku kata ${t}?`),300);
+ }
+}
 
-        <!-- 1. Tebak Kendaraan -->
-        <div id="screen-kendaraan" class="game-screen">
-            <div class="speech-bubble" id="vehiclePrompt">Dengarkan Suaranya!</div>
-            <button class="btn btn-orange" onclick="repeatVehicleAudio()">🔊 Ulangi Suara Soal</button>
-            <div class="vehicle-card-grid" id="vehicleOptions"></div>
-        </div>
+/* ============ 3. ANGKA ============ */
+const FR=['🍎','⭐','🍌','🍓','🐟','🎈'];
+function modAngka(mode='kenal'){
+ clearTimers();const top=tabs([['🔢 Mengenal Angka',()=>modAngka('kenal')],['➕ Penjumlahan Ringan',()=>modAngka('tambah')]],mode==='kenal'?0:1);
+ const ic=pick(FR);const els=[top];let ans,q,vis;
+ if(mode==='kenal'){ans=rnd(1,10);q=`Ada berapa ${ic}?`;vis=ic.repeat(ans);}
+ else{const a=rnd(1,5),b=rnd(1,5);ans=a+b;q=`Berapa ${a} ditambah ${b}?`;vis=`${ic.repeat(a)} + ${ic.repeat(b)} = ?`}
+ const o=document.createElement('div');o.className='objs';o.textContent=vis;
+ if(mode==='tambah'){const e=document.createElement('div');e.className='big';e.textContent=vis.includes('=')?'':'';}
+ els.push(bubble(q),o,btn('🔊 Ulangi Suara',()=>speak(q),'o'));
+ const g=gridOf(5);g.style.maxWidth='440px';
+ for(let i=1;i<=10;i++)g.appendChild(card(i,el=>{speak(String(i));
+  if(i===ans){el.classList.add('ok');later(()=>{praise();later(()=>modAngka(mode),1600)},500)}else{el.classList.add('bad');setTimeout(()=>el.classList.remove('bad'),400);later(()=>tryAgain(),600)}}));
+ els.push(g);mount(...els);later(()=>speak(q),300);
+}
 
-        <!-- 2. Puzzle Shape -->
-        <div id="screen-puzzle" class="game-screen">
-            <div class="speech-bubble">Cocokkan kendaraan dengan bayangannya!</div>
-            <div class="puzzle-box">
-                <div class="puzzle-target-container">
-                    <div id="puzzleTarget" class="puzzle-shadow">✈️</div>
-                </div>
-                <div class="grid-cards" id="puzzlePieces" style="max-width: 320px;"></div>
-            </div>
-        </div>
+/* ============ 4. MEWARNAI ============ */
+const COL=[['#FF4757','Merah'],['#FF7F50','Jingga'],['#FFD43B','Kuning'],['#2ED573','Hijau'],['#1E90FF','Biru'],['#8E44AD','Ungu'],['#FF8FB1','Merah muda'],['#8B5A2B','Cokelat']];
+const ART={
+ 'Mobil':'<path class="r" d="M20 130 V100 q0-10 10-12 l30-6 28-34 h80 l32 34 40 6 q10 2 10 12 v30z"/><path class="r" d="M95 52 h60 l24 30 h-84z"/><path class="r" d="M170 52 l24 30 h38 l-26-30z"/><circle class="r" cx="85" cy="135" r="24"/><circle class="r" cx="235" cy="135" r="24"/><circle class="r" cx="85" cy="135" r="9"/><circle class="r" cx="235" cy="135" r="9"/>',
+ 'Kucing':'<path class="r" d="M70 190 q-40-10-30-60 q5 25 40 20z"/><ellipse class="r" cx="160" cy="165" rx="75" ry="50"/><polygon class="r" points="105,90 112,38 150,70"/><polygon class="r" points="215,90 208,38 170,70"/><circle class="r" cx="160" cy="105" r="55"/><circle class="r" cx="138" cy="98" r="10"/><circle class="r" cx="182" cy="98" r="10"/><polygon class="r" points="160,112 150,124 170,124"/>',
+ 'Rumah':'<circle class="r" cx="45" cy="45" r="26"/><rect class="r" x="70" y="85" width="180" height="100"/><polygon class="r" points="55,90 160,25 265,90"/><rect class="r" x="145" y="125" width="34" height="60"/><rect class="r" x="90" y="110" width="40" height="36"/><rect class="r" x="195" y="110" width="40" height="36"/>'
+};
+let curCol=COL[0], curArt='Mobil';
+function modWarna(){
+ clearTimers();const top=tabs(Object.keys(ART).map(k=>[({Mobil:'🚗',Kucing:'🐱',Rumah:'🏠'})[k]+' '+k,()=>{curArt=k;modWarna()},k===curArt?'':'off']));
+ const svg=document.createElementNS('http://www.w3.org/2000/svg','svg');svg.setAttribute('viewBox','0 0 320 220');svg.setAttribute('class','art');svg.innerHTML=ART[curArt];
+ svg.querySelectorAll('.r').forEach(p=>p.addEventListener('click',()=>{p.style.fill=curCol[0];tone(500+Math.random()*300,'triangle',.12)}));
+ const pal=document.createElement('div');pal.className='row';pal.style.margin='12px 0';
+ COL.forEach(c=>{const s=document.createElement('div');s.className='sw'+(c===curCol?' on':'');s.style.background=c[0];s.onclick=()=>{curCol=c;pal.querySelectorAll('.sw').forEach(x=>x.classList.remove('on'));s.classList.add('on');speak(c[1])};pal.appendChild(s)});
+ const act=document.createElement('div');act.appendChild(btn('🗑 Mulai Lagi',()=>modWarna(),'r'));act.appendChild(btn('✅ Selesai!',()=>{praise();speak('Gambar kamu bagus sekali!')},'g'));
+ mount(top,bubble('Pilih warna, lalu sentuh gambar!'),pal,svg,act);
+}
 
-        <!-- 3. Hijaiyyah (Fathah A-Ya) -->
-        <div id="screen-hijaiyah" class="game-screen">
-            <div class="speech-bubble" id="hijaiyahPrompt">Dengarkan dan Tebak Huruf!</div>
-            <button class="btn btn-orange" onclick="repeatHijaiyahAudio()">🔊 Ulangi Suara Soal</button>
-            <div class="hijaiyah-grid-custom" id="hijaiyahGrid"></div>
-        </div>
+/* ============ 5. SUSUN BALOK (Algoritma & Urutan) ============ */
+const BC={R:'#FF4757',B:'#1E90FF',Y:'#FFD43B',G:'#2ED573',W:'#fff'};
+const PAT=[['RRRR','BBBB','RRRR','BBBB'],['RBRB','BRBR','RBRB','BRBR'],['YWWY','WYYW','WYYW','YWWY'],['GGGG','GBBG','GBBG','GGGG'],['RWWR','RRRR','WGGW','WGGW']];
+let bpat,bcol='R',bgrid;
+function modBalok(first=true){
+ clearTimers();bpat=pick(PAT);bgrid=Array.from({length:4},()=>Array(4).fill('W'));
+ const mini=(data,editable)=>{const d=document.createElement('div');d.className='mz';d.style.gridTemplateColumns='repeat(4,'+(editable?'58px':'30px')+')';
+  data.forEach((row,r)=>[...row].forEach((c,i)=>{const e=document.createElement('div');e.style.cssText=`width:${editable?58:30}px;height:${editable?58:30}px;border-radius:${editable?12:6}px;background:${BC[c]};border:3px solid #CBD5E1;cursor:${editable?'pointer':'default'}`;
+   if(editable)e.onclick=()=>{bgrid[r][i]=bcol;e.style.background=BC[bcol];tone(400+r*60,'triangle',.1)};d.appendChild(e)}));return d};
+ const wrap=document.createElement('div');wrap.className='row';wrap.style.alignItems='flex-start';
+ const a=document.createElement('div');a.innerHTML='<div class="note">Contoh susunan:</div>';a.appendChild(mini(bpat,false));
+ const b=document.createElement('div');b.innerHTML='<div class="note">Susunan kamu:</div>';const mine=mini(bgrid.map(r=>r.join('')),true);b.appendChild(mine);
+ wrap.append(a,b);
+ const pal=document.createElement('div');pal.className='row';pal.style.margin='12px 0';
+ Object.entries(BC).forEach(([k,v])=>{const s=document.createElement('div');s.className='sw'+(k===bcol?' on':'');s.style.background=v;s.onclick=()=>{bcol=k;pal.querySelectorAll('.sw').forEach(x=>x.classList.remove('on'));s.classList.add('on')};pal.appendChild(s)});
+ const act=document.createElement('div');
+ act.appendChild(btn('✅ Periksa',()=>{const ok=bpat.every((row,r)=>[...row].every((c,i)=>bgrid[r][i]===c));if(ok){praise();later(()=>modBalok(),1800)}else tryAgain('Belum sama. Lihat contoh lagi, baris demi baris ya!')},'g'));
+ act.appendChild(btn('🔊 Petunjuk',()=>speak('Susun balok dari baris paling atas, dari kiri ke kanan, sama seperti contoh.'),'o'));
+ mount(bubble('Susun balok sama seperti contoh!'),wrap,pal,act);later(()=>speak('Susun balok sama seperti contoh! Mulai dari baris paling atas.'),300);
+}
 
-        <!-- 4. Angka & Penjumlahan -->
-        <div id="screen-angka" class="game-screen">
-            <div class="sub-menu-bar">
-                <button class="btn btn-blue" onclick="setAngkaMode('mengenal')">1️⃣ Mengenal Angka</button>
-                <button class="btn btn-purple" onclick="setAngkaMode('penjumlahan')">➕ Penjumlahan Ringan</button>
-            </div>
-            <div class="speech-bubble" id="angkaPrompt">Pilih Sub Menu di Atas!</div>
-            <div id="mathContainer" style="display: none;" class="math-question">5 + 2 = ?</div>
-            <button class="btn btn-orange" id="repeatAngkaBtn" onclick="repeatAngkaAudio()">🔊 Ulangi Suara Soal</button>
-            <div class="grid-cards" id="angkaGrid" style="grid-template-columns: repeat(5, 1fr);"></div>
-        </div>
+/* ============ 6. PUZZLE & TEBAK KENDARAAN ============ */
+const VEH=[['Mobil','🚗'],['Motor','🏍️'],['Pesawat','✈️'],['Kapal Laut','🚢'],['Kereta Api','🚂'],['Helikopter','🚁'],['Mobil Pemadam Kebakaran','🚒'],['Ambulans','🚑'],['Truk','🚚'],['Sepeda','🚲']];
+function modKendaraan(mode='tebak'){
+ clearTimers();const top=tabs([['🔊 Tebak Kendaraan',()=>modKendaraan('tebak')],['🧩 Puzzle Bayangan',()=>modKendaraan('puzzle')]],mode==='tebak'?0:1);
+ if(mode==='tebak'){
+  const t=pick(VEH);const opts=shuffle([t,...shuffle(VEH.filter(v=>v!==t)).slice(0,3)]);
+  const g=gridOf(2);g.style.maxWidth='460px';
+  opts.forEach(o=>{const c=card(o[1],el=>{if(o===t){el.classList.add('ok');praise();later(()=>modKendaraan('tebak'),1800)}else{el.classList.add('bad');setTimeout(()=>el.classList.remove('bad'),400);tryAgain()}});c.style.fontSize='4.6rem';c.style.minHeight='120px';g.appendChild(c)});
+  mount(top,bubble(`Manakah gambar ${t[0]}?`),btn('🔊 Ulangi Suara',()=>speak(`Coba pilih, manakah gambar ${t[0]}?`),'o'),g);later(()=>speak(`Coba pilih, manakah gambar ${t[0]}?`),300);
+ }else{
+  const s=shuffle(VEH);const t=s[0];const pcs=shuffle(s.slice(0,3));
+  const box=document.createElement('div');box.className='row';
+  const sh=document.createElement('div');sh.className='shadow';sh.textContent=t[1];
+  const g=gridOf(3);g.style.maxWidth='340px';
+  pcs.forEach(p=>g.appendChild(card(p[1],el=>{if(p===t){el.classList.add('ok');sh.style.filter='none';praise();later(()=>modKendaraan('puzzle'),1700)}else{el.classList.add('bad');setTimeout(()=>el.classList.remove('bad'),400);tryAgain()}})));
+  g.querySelectorAll('.card').forEach(c=>c.style.fontSize='3rem');
+  box.append(sh,g);mount(top,bubble('Cocokkan kendaraan dengan bayangannya!'),box);later(()=>speak('Cari kendaraan yang sama dengan bayangan!'),300);
+ }
+}
 
-        <!-- 5. Alphabet -->
-        <div id="screen-alphabet" class="game-screen">
-            <div class="speech-bubble">Sentuh Huruf Untuk Mendengar Suaranya!</div>
-            <div class="grid-cards" id="alphabetGrid" style="grid-template-columns: repeat(6, 1fr); max-height: 270px; overflow-y: auto;"></div>
-        </div>
+/* ============ 7. ALPHABET & ASAH OTAK ============ */
+const ABC=['Apel','Bola','Cicak','Domba','Ember','Foto','Gajah','Harimau','Ikan','Jeruk','Kucing','Lampu','Mobil','Nanas','Obor','Pisang','Quran','Rumah','Sapi','Topi','Ular','Vas','Wortel','Xilofon','Yoyo','Zebra'];
+const MEMI=['🚗','✈️','🍎','🐱','🐟','🚲'];
+let mflip=[],mdone=0,mlock=false;
+function modAbc(mode='abjad'){
+ clearTimers();const top=tabs([['🔤 Abjad A-Z',()=>modAbc('abjad')],['🧠 Asah Otak',()=>modAbc('memori')]],mode==='abjad'?0:1);
+ if(mode==='abjad'){
+  const show=document.createElement('div');show.className='big';show.textContent='A a';const word=document.createElement('div');word.className='note';word.style.fontSize='1.2rem';word.textContent='Apel';
+  const g=gridOf(6);g.style.maxWidth='520px';g.style.maxHeight='260px';g.style.overflowY='auto';g.style.padding='6px';
+  ABC.forEach((w,i)=>{const L=String.fromCharCode(65+i);const c=card(L,()=>{show.textContent=L+' '+L.toLowerCase();word.textContent=w;speak(`Huruf ${L}, untuk ${w}`)});c.style.fontSize='1.8rem';g.appendChild(c)});
+  mount(top,bubble('Sentuh huruf untuk mendengar suaranya!'),show,word,g);
+ }else{
+  mflip=[];mdone=0;mlock=false;const ic=shuffle([...MEMI,...MEMI]);const g=gridOf(4);g.style.maxWidth='360px';
+  ic.forEach(i=>{const c=document.createElement('div');c.className='mem';c.textContent='❓';c.onclick=()=>{
+   if(mlock||c.classList.contains('f'))return;c.classList.add('f');c.textContent=i;sfxTap();mflip.push([c,i]);
+   if(mflip.length===2){if(mflip[0][1]===mflip[1][1]){mdone++;mflip=[];praise();if(mdone===MEMI.length){later(()=>{speak('Selamat, Abror dan Arqom menyelesaikan permainan!');later(()=>modAbc('memori'),3500)},1200)}}
+    else{mlock=true;sfxBad();later(()=>{mflip.forEach(([x])=>{x.classList.remove('f');x.textContent='❓'});mflip=[];mlock=false},900)}}};g.appendChild(c)});
+  mount(top,bubble('Temukan dua gambar yang sama!'),g);later(()=>speak('Temukan dua gambar yang sama!'),300);
+ }
+}
 
-        <!-- 6. Asah Otak -->
-        <div id="screen-asahOtak" class="game-screen">
-            <div class="speech-bubble">Temukan Dua Gambar yang Sama!</div>
-            <div class="memory-grid" id="memoryGrid"></div>
-        </div>
-    </div>
+/* ============ 8. URUTAN (Sequencing) ============ */
+const TASKS=[
+ {t:'Memakai pakaian',s:[['👕','Pakai kaos'],['🩳','Pakai celana'],['🧦','Pakai kaus kaki'],['👟','Pakai sepatu']]},
+ {t:'Mencuci tangan',s:[['🚰','Buka keran'],['🧼','Pakai sabun'],['👏','Gosok tangan'],['💦','Bilas'],['🧻','Keringkan']]},
+ {t:'Menanam bunga',s:[['🌰','Tanam biji'],['💧','Siram air'],['🌱','Tunas tumbuh'],['🌻','Bunga mekar']]},
+ {t:'Menyikat gigi',s:[['🪥','Ambil sikat gigi'],['🦷','Beri pasta gigi'],['😁','Sikat gigi'],['🥤','Berkumur']]}
+];
+let tk=-1;
+function modUrutan(){
+ clearTimers();tk=(tk+1)%TASKS.length;const T=TASKS[tk];let next=0;
+ const g=gridOf(Math.min(T.s.length,3));g.style.maxWidth='520px';g.style.gap='18px';
+ shuffle(T.s.map((s,i)=>[s,i])).forEach(([s,i])=>{const c=document.createElement('div');c.className='card seq';c.innerHTML=`${s[0]}<small>${s[1]}</small>`;
+  c.onclick=()=>{if(c.classList.contains('ok'))return;speak(s[1]);
+   if(i===next){next++;c.classList.add('ok');const b=document.createElement('b');b.textContent=next;c.appendChild(b);
+    if(next===T.s.length){later(()=>{praise();later(modUrutan,2500)},900)}}
+   else{c.classList.add('bad');setTimeout(()=>c.classList.remove('bad'),400);later(()=>tryAgain(`Hmm, apa yang pertama dilakukan? Coba langkah ke-${next+1} ya!`),700)}};g.appendChild(c)});
+ mount(bubble(`Urutkan: ${T.t}`),el('div','note','Sentuh gambar sesuai urutan dari langkah pertama!'),g);later(()=>speak(`Urutkan kegiatan ${T.t}. Mana yang dilakukan pertama?`),300);
+}
+function el(tag,cls,txt){const e=document.createElement(tag);e.className=cls;e.textContent=txt;return e}
 
-    <script>
-        let score = 0;
-        let currentTargetVehicle = {};
-        let currentTargetHijaiyah = {};
-        let currentTargetAngka = 0;
-        let currentMathAnswer = 0;
-        let angkaMode = 'mengenal';
-        let currentPuzzleAnswer = '';
-        let systemVoices = [];
+/* ============ 9. SEBAB & AKIBAT ============ */
+function modSebab(){
+ clearTimers();const S={lamp:false,color:'#E2E8F0',colorName:'',cat:2};
+ const goals=[['Nyalakan lampu!',s=>s.lamp],['Ubah kotak menjadi biru!',s=>s.colorName==='biru'],['Ubah kotak menjadi merah!',s=>s.colorName==='merah'],['Gerakkan kucing ke paling kanan!',s=>s.cat===4],['Gerakkan kucing ke paling kiri!',s=>s.cat===0]];
+ let goal=pick(goals);const gb=bubble('Tantangan: '+goal[0]);const cap=el('div','note','Tekan tombol dan lihat akibatnya!');cap.style.minHeight='24px';
+ const scene=document.createElement('div');scene.className='scene';
+ const render=()=>{scene.style.background=S.lamp?'#FEF9C3':'#334155';scene.innerHTML=`<div class="row" style="justify-content:space-around"><div style="font-size:3.6rem;filter:${S.lamp?'drop-shadow(0 0 14px #FACC15)':'grayscale(1) opacity(.6)'}">💡</div><div style="width:76px;height:76px;border-radius:16px;border:4px solid #fff;background:${S.color}"></div></div><div style="display:flex;margin-top:14px;font-size:2.4rem;justify-content:space-between;padding:0 4px">${[0,1,2,3,4].map(i=>`<span style="width:20%;text-align:center;opacity:${i===S.cat?1:0}">🐱</span>`).join('')}</div>`};
+ const act=(sebab,akibat)=>{cap.textContent=`Sebab: ${sebab} → Akibat: ${akibat}`;render();speak(`${sebab}, akibatnya ${akibat}`,()=>{if(goal[1](S)){praise();later(()=>modSebab(),2200)}})};
+ const bar=document.createElement('div');bar.className='row';
+ bar.append(btn('💡 Lampu',()=>{S.lamp=!S.lamp;act('kamu menekan tombol lampu',S.lamp?'lampu menyala':'lampu mati')},'o'),
+  btn('🔴 Merah',()=>{S.color='#FF4757';S.colorName='merah';act('kamu menekan tombol merah','kotak menjadi merah')},'r'),
+  btn('🔵 Biru',()=>{S.color='#1E90FF';S.colorName='biru';act('kamu menekan tombol biru','kotak menjadi biru')}),
+  btn('⬅️ Kiri',()=>{S.cat=Math.max(0,S.cat-1);act('kamu menekan tombol kiri','kucing berjalan ke kiri')},'p'),
+  btn('➡️ Kanan',()=>{S.cat=Math.min(4,S.cat+1);act('kamu menekan tombol kanan','kucing berjalan ke kanan')},'p'));
+ render();mount(gb,scene,cap,bar);later(()=>speak('Tantangan: '+goal[0]),300);
+}
 
-        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+/* ============ 10 & 11. ROBOT: ALGORITMA & DEBUGGING ============ */
+const ARW={U:'⬆️',D:'⬇️',L:'⬅️',R:'➡️'}, DLT={U:[-1,0],D:[1,0],L:[0,-1],R:[0,1]};
+const ALGO=[{s:[0,0],g:[0,3],k:[],p:[]},{s:[0,0],g:[2,2],k:[[1,1]],p:[]},{s:[0,0],g:[3,3],k:[[1,1],[2,2],[1,2]],p:[]}];
+const BUG=[{s:[0,0],g:[0,3],k:[],p:['R','R','D']},{s:[0,0],g:[2,2],k:[[1,1]],p:['R','D','D','R']},{s:[3,0],g:[0,3],k:[[2,1],[1,2]],p:['R','R','R','U','U','L']}];
+let lvl={algo:0,debug:0};
+function modMaze(mode){
+ clearTimers();const L=(mode==='algo'?ALGO:BUG)[lvl[mode]%3];let prog=[...L.p],sel=-1,pos=[...L.s],busy=false,errIdx=-1;
+ const isRock=(r,c)=>L.k.some(k=>k[0]===r&&k[1]===c);
+ const mz=document.createElement('div');mz.className='mz';mz.style.gridTemplateColumns='repeat(4,62px)';
+ const tray=document.createElement('div');tray.className='tray';
+ const info=bubble(mode==='algo'?'Susun panah agar robot sampai ke ⭐':'Robot tersesat! Cari langkah yang salah, lalu perbaiki');
+ const drawM=()=>{mz.innerHTML='';for(let r=0;r<4;r++)for(let c=0;c<4;c++){const d=document.createElement('div');d.className='cell';
+  d.textContent=(pos[0]===r&&pos[1]===c)?'🤖':isRock(r,c)?'🪨':(L.g[0]===r&&L.g[1]===c)?'⭐':'';mz.appendChild(d)}};
+ const drawT=()=>{tray.innerHTML='';if(!prog.length){tray.textContent='Sentuh panah di bawah untuk menambah langkah';tray.style.color='#94A3B8'}
+  prog.forEach((p,i)=>{const b=document.createElement('div');b.className='blk'+(i===sel?' sel':'')+(i===errIdx?' err':'');b.textContent=ARW[p];b.onclick=()=>{if(busy)return;sel=sel===i?-1:i;errIdx=-1;sfxTap();drawT()};tray.appendChild(b)})};
+ const add=d=>{if(busy)return;sfxTap();errIdx=-1;if(sel>=0){prog[sel]=d;sel=-1}else if(prog.length<12)prog.push(d);drawT()};
+ const pad=document.createElement('div');pad.className='row';['U','L','D','R'].forEach(d=>{const b=btn(ARW[d],()=>add(d),'p');b.style.fontSize='1.4rem';pad.appendChild(b)});
+ const run=()=>{if(busy||!prog.length)return;busy=true;sel=-1;errIdx=-1;pos=[...L.s];drawM();drawT();let i=0;
+  const step=()=>{if(i>=prog.length){busy=false;if(pos[0]===L.g[0]&&pos[1]===L.g[1]){praise();speak('Hore! Robot sampai tujuan!');later(()=>{lvl[mode]++;modMaze(mode)},2600)}else{tryAgain(mode==='debug'?'Robot belum sampai. Cari langkah yang salah lalu ganti ya!':'Robot belum sampai. Tambah atau ubah panahnya ya!')}return}
+   const d=DLT[prog[i]],nr=pos[0]+d[0],nc=pos[1]+d[1];
+   if(nr<0||nr>3||nc<0||nc>3||isRock(nr,nc)){busy=false;errIdx=i;drawT();sfxBad();speak(`Aduh! Robot terhenti di langkah ke-${i+1}. Ada yang salah di situ!`);return}
+   pos=[nr,nc];drawM();tone(400+i*50,'triangle',.1);i++;later(step,650)};
+  later(step,300)};
+ const act=document.createElement('div');
+ act.append(btn('▶️ Jalankan',run,'g'),btn('⌫ Hapus',()=>{if(busy)return;if(sel>=0){prog.splice(sel,1);sel=-1}else prog.pop();errIdx=-1;drawT()},'o'),btn('🗑 Ulang',()=>{if(busy)return;prog=[...L.p];sel=-1;errIdx=-1;pos=[...L.s];drawM();drawT()},'r'));
+ const tip=el('div','note',mode==='algo'?`Level ${lvl[mode]%3+1} dari 3 · Susun urutan panah, lalu tekan Jalankan.`:`Level ${lvl[mode]%3+1} dari 3 · Sentuh panah yang salah, lalu pilih panah pengganti.`);
+ drawM();drawT();mount(info,tip,mz,tray,pad,act);
+ later(()=>speak(mode==='algo'?'Susun panah agar robot sampai ke bintang!':'Robot tersesat! Jalankan, lalu cari langkah yang salah dan perbaiki!'),300);
+}
 
-        function loadVoices() {
-            if ('speechSynthesis' in window) {
-                systemVoices = window.speechSynthesis.getVoices();
-            }
-        }
-        if ('speechSynthesis' in window) {
-            window.speechSynthesis.onvoiceschanged = loadVoices;
-            loadVoices();
-        }
-
-        function playTone(freq, type, duration) {
-            try {
-                const osc = audioCtx.createOscillator();
-                const gain = audioCtx.createGain();
-                osc.type = type;
-                osc.frequency.value = freq;
-                osc.connect(gain);
-                gain.connect(audioCtx.destination);
-                osc.start();
-                gain.gain.exponentialRampToValueAtTime(0.00001, audioCtx.currentTime + duration);
-                osc.stop(audioCtx.currentTime + duration);
-            } catch(e){}
-        }
-
-        function playCorrectSFX() {
-            playTone(523.25, 'triangle', 0.15);
-            setTimeout(() => playTone(659.25, 'triangle', 0.2), 150);
-            setTimeout(() => playTone(783.99, 'triangle', 0.3), 300);
-        }
-
-        function playWrongSFX() {
-            playTone(220, 'sawtooth', 0.2);
-            setTimeout(() => playTone(180, 'sawtooth', 0.3), 200);
-        }
-
-        function speakText(text) {
-            if ('speechSynthesis' in window) {
-                window.speechSynthesis.cancel();
-                const utterance = new SpeechSynthesisUtterance(text);
-                utterance.lang = 'id-ID';
-                utterance.rate = 0.88;
-                utterance.pitch = 1.0; 
-
-                // Cari apakah ada profil suara LAKI-LAKI di HP/Laptop
-                if (systemVoices.length > 0) {
-                    const idVoices = systemVoices.filter(v => v.lang.includes('id') || v.lang.includes('ID'));
-                    const maleVoice = idVoices.find(v => v.name.toLowerCase().includes('male') || v.name.toLowerCase().includes('pria') || v.name.toLowerCase().includes('david') || v.name.toLowerCase().includes('idris'));
-                    if (maleVoice) {
-                        utterance.voice = maleVoice;
-                    } else if (idVoices.length > 0) {
-                        utterance.voice = idVoices[0];
-                    }
-                }
-
-                window.speechSynthesis.speak(utterance);
-            }
-        }
-
-        function givePraise() {
-            const praises = ["Kamu hebat!", "Abror hebat!", "Arqom hebat!", "Pintar sekali!", "Luar biasa!", "Jawaban kamu benar!"];
-            const randomPraise = praises[Math.floor(Math.random() * praises.length)];
-            score += 10;
-            document.getElementById('scoreDisplay').innerText = `Bintang: ⭐ ${score}`;
-            playCorrectSFX();
-            speakText(randomPraise);
-        }
-
-        function giveTryAgain() {
-            playWrongSFX();
-            speakText("Ayo coba lagi ya!");
-        }
-
-        function switchGame(gameName) {
-            document.querySelectorAll('.game-screen').forEach(s => s.classList.remove('active'));
-            document.getElementById(`screen-${gameName}`).classList.add('active');
-
-            if (gameName === 'kendaraan') initVehicleGame();
-            if (gameName === 'puzzle') initPuzzleGame();
-            if (gameName === 'hijaiyah') initHijaiyahGame();
-            if (gameName === 'angka') initAngkaGame();
-            if (gameName === 'alphabet') initAlphabetGame();
-            if (gameName === 'asahOtak') initMemoryGame();
-        }
-
-        /* 1. TEBAK KENDARAAN */
-        const vehicles = [
-            { name: "Mobil", emoji: "🚗" },
-            { name: "Motor", emoji: "🏍️" },
-            { name: "Pesawat", emoji: "✈️" },
-            { name: "Kapal Laut", emoji: "🚢" },
-            { name: "Kereta Api", emoji: "🚂" },
-            { name: "Helikopter", emoji: "🚁" },
-            { name: "Pemadam Kebakaran", emoji: "🚒" },
-            { name: "Ambulans", emoji: "🚑" },
-            { name: "Truk", emoji: "🚚" },
-            { name: "Sepeda", emoji: "🚲" }
-        ];
-
-        function initVehicleGame() {
-            const current = vehicles[Math.floor(Math.random() * vehicles.length)];
-            currentTargetVehicle = current;
-
-            document.getElementById('vehiclePrompt').innerText = `Manakah gambar ${current.name}?`;
-            repeatVehicleAudio();
-
-            let options = [current];
-            while(options.length < 4) {
-                let r = vehicles[Math.floor(Math.random() * vehicles.length)];
-                if(!options.some(item => item.name === r.name)) options.push(r);
-            }
-            options.sort(() => Math.random() - 0.5);
-
-            const container = document.getElementById('vehicleOptions');
-            container.innerHTML = '';
-            options.forEach(opt => {
-                const btn = document.createElement('div');
-                btn.className = 'card-vehicle-img';
-                btn.innerText = opt.emoji;
-                btn.onclick = () => {
-                    if (opt.name === currentTargetVehicle.name) {
-                        givePraise();
-                        setTimeout(initVehicleGame, 1800);
-                    } else {
-                        giveTryAgain();
-                    }
-                };
-                container.appendChild(btn);
-            });
-        }
-
-        function repeatVehicleAudio() {
-            if (currentTargetVehicle.name) {
-                speakText(`Coba pilih, manakah gambar ${currentTargetVehicle.name}?`);
-            }
-        }
-
-        /* 2. PUZZLE GAME */
-        function initPuzzleGame() {
-            const shuffled = [...vehicles].sort(() => Math.random() - 0.5);
-            const target = shuffled[0];
-            currentPuzzleAnswer = target.emoji;
-
-            document.getElementById('puzzleTarget').innerText = target.emoji;
-            speakText("Cari bentuk kendaraan yang sama!");
-
-            const pieces = shuffled.slice(0, 3);
-            pieces.sort(() => Math.random() - 0.5);
-
-            const container = document.getElementById('puzzlePieces');
-            container.innerHTML = '';
-            pieces.forEach(p => {
-                const card = document.createElement('div');
-                card.className = 'card-item';
-                card.innerText = p.emoji;
-                card.onclick = () => {
-                    if (p.emoji === currentPuzzleAnswer) {
-                        givePraise();
-                        setTimeout(initPuzzleGame, 1500);
-                    } else {
-                        giveTryAgain();
-                    }
-                };
-                container.appendChild(card);
-            });
-        }
-
-        /* 3. HIJAIYYAH (EJAAN LAFAL FONETIS FASIH) */
-        const hijaiyahFathahData = [
-            { char: "أَ", sound: "A", speak: "A" },
-            { char: "بَ", sound: "Ba", speak: "Ba" },
-            { char: "تَ", sound: "Ta", speak: "Ta" },
-            { char: "ثَ", sound: "Tsa", speak: "Tsa" },
-            { char: "جَ", sound: "Ja", speak: "Ja" },
-            { char: "حَ", sound: "Ha", speak: "Ha" },
-            { char: "خَ", sound: "Kho", speak: "Ho" },      /* "Kho" diubah ke "Ho" agar tidak dieja K-H-O */
-            { char: "دَ", sound: "Da", speak: "Da" },
-            { char: "ذَ", sound: "Dza", speak: "Zha" },    /* "Dza" diubah ke "Zha" agar tak dieja D-Z-A */
-            { char: "رَ", sound: "Ro", speak: "Ro" },
-            { char: "زَ", sound: "Za", speak: "Za" },
-            { char: "سَ", sound: "Sa", speak: "Sa" },
-            { char: "شَ", sound: "Sya", speak: "Sha" },    /* "Sya" diubah ke "Sha" agar tak dieja S-Y-A */
-            { char: "صَ", sound: "Sho", speak: "So" },     /* "Sho" diubah ke "So" agar tak dieja S-H-O */
-            { char: "ضَ", sound: "Dho", speak: "Do" },     /* "Dho" diubah ke "Do" agar tak dieja D-H-O */
-            { char: "طَ", sound: "Tho", speak: "To" },     /* "Tho" diubah ke "To" agar tak dieja T-H-O */
-            { char: "ظَ", sound: "Zho", speak: "Zo" },     /* "Zho" diubah ke "Zo" agar tak dieja Z-H-O */
-            { char: "عَ", sound: "'A", speak: "A" },
-            { char: "غَ", sound: "Gho", speak: "Go" },     /* "Gho" diubah ke "Go" agar tak dieja G-H-O */
-            { char: "فَ", sound: "Fa", speak: "Fa" },
-            { char: "قَ", sound: "Qo", speak: "Ko" },
-            { char: "كَ", sound: "Ka", speak: "Ka" },
-            { char: "لَ", sound: "La", speak: "La" },
-            { char: "مَ", sound: "Ma", speak: "Ma" },
-            { char: "نَ", sound: "Na", speak: "Na" },
-            { char: "هَـ", sound: "Ha", speak: "Ha" },
-            { char: "وَ", sound: "Wa", speak: "Wa" },
-            { char: "يَ", sound: "Ya", speak: "Ya" }
-        ];
-
-        function initHijaiyahGame() {
-            const target = hijaiyahFathahData[Math.floor(Math.random() * hijaiyahFathahData.length)];
-            currentTargetHijaiyah = target;
-
-            document.getElementById('hijaiyahPrompt').innerText = `Mana huruf ${target.sound}?`;
-            repeatHijaiyahAudio();
-
-            const container = document.getElementById('hijaiyahGrid');
-            container.innerHTML = '';
-            hijaiyahFathahData.forEach(item => {
-                const card = document.createElement('div');
-                card.className = 'card-hijaiyah';
-                card.innerText = item.char;
-                card.onclick = () => {
-                    speakText(item.speak);
-                    if (item.sound === currentTargetHijaiyah.sound) {
-                        givePraise();
-                        setTimeout(initHijaiyahGame, 1800);
-                    } else {
-                        giveTryAgain();
-                    }
-                };
-                container.appendChild(card);
-            });
-        }
-
-        function repeatHijaiyahAudio() {
-            if (currentTargetHijaiyah.speak) {
-                speakText(`Coba mana huruf ${currentTargetHijaiyah.speak}?`);
-            }
-        }
-
-        /* 4. ANGKA & PENJUMLAHAN */
-        function setAngkaMode(mode) {
-            angkaMode = mode;
-            initAngkaGame();
-        }
-
-        function initAngkaGame() {
-            const mathBox = document.getElementById('mathContainer');
-            const promptText = document.getElementById('angkaPrompt');
-
-            if (angkaMode === 'mengenal') {
-                mathBox.style.display = 'none';
-                currentTargetAngka = Math.floor(Math.random() * 10) + 1;
-                promptText.innerText = `Pilih Angka ${currentTargetAngka}!`;
-                speakText(`Coba pilih angka ${currentTargetAngka}!`);
-            } else {
-                let num1 = Math.floor(Math.random() * 5) + 1;
-                let num2 = Math.floor(Math.random() * 5) + 1;
-                currentMathAnswer = num1 + num2;
-
-                mathBox.style.display = 'block';
-                mathBox.innerText = `${num1} + ${num2} = ?`;
-                promptText.innerText = `Berapakah ${num1} ditambah ${num2}?`;
-                speakText(`Berapa ${num1} ditambah ${num2}? Pilih jawabannya!`);
-            }
-
-            const container = document.getElementById('angkaGrid');
-            container.innerHTML = '';
-            for(let i=1; i<=10; i++) {
-                const card = document.createElement('div');
-                card.className = 'card-item';
-                card.innerText = i;
-                card.onclick = () => {
-                    speakText(i.toString());
-                    if (angkaMode === 'mengenal') {
-                        if (i === currentTargetAngka) {
-                            givePraise();
-                            setTimeout(initAngkaGame, 1500);
-                        } else {
-                            giveTryAgain();
-                        }
-                    } else {
-                        if (i === currentMathAnswer) {
-                            givePraise();
-                            setTimeout(initAngkaGame, 1800);
-                        } else {
-                            giveTryAgain();
-                        }
-                    }
-                };
-                container.appendChild(card);
-            }
-        }
-
-        function repeatAngkaAudio() {
-            if (angkaMode === 'mengenal') {
-                speakText(`Coba pilih angka ${currentTargetAngka}!`);
-            } else {
-                speakText(document.getElementById('angkaPrompt').innerText);
-            }
-        }
-
-        /* 5. ALPHABET GAME */
-        function initAlphabetGame() {
-            const container = document.getElementById('alphabetGrid');
-            container.innerHTML = '';
-            for (let i = 65; i <= 90; i++) {
-                const char = String.fromCharCode(i);
-                const card = document.createElement('div');
-                card.className = 'card-item';
-                card.style.fontSize = '1.8rem';
-                card.innerText = char;
-                card.onclick = () => speakText(`Huruf ${char}`);
-                container.appendChild(card);
-            }
-        }
-
-        /* 6. ASAH OTAK (MEMORY) */
-        const memoryIcons = ['🚗', '✈️', '🍎', '🐱', '🚗', '✈️', '🍎', '🐱'];
-        let flippedCards = [];
-        let matchedPairs = 0;
-
-        function initMemoryGame() {
-            matchedPairs = 0;
-            flippedCards = [];
-            const shuffled = [...memoryIcons].sort(() => Math.random() - 0.5);
-            const container = document.getElementById('memoryGrid');
-            container.innerHTML = '';
-
-            shuffled.forEach((icon, index) => {
-                const card = document.createElement('div');
-                card.className = 'mem-card';
-                card.dataset.icon = icon;
-                card.dataset.index = index;
-                card.innerText = '❓';
-                card.onclick = () => handleMemoryClick(card);
-                container.appendChild(card);
-            });
-            speakText("Temukan dua gambar yang sama!");
-        }
-
-        function handleMemoryClick(card) {
-            if (flippedCards.length < 2 && !card.classList.contains('flipped')) {
-                card.classList.add('flipped');
-                card.innerText = card.dataset.icon;
-                flippedCards.push(card);
-
-                if (flippedCards.length === 2) {
-                    if (flippedCards[0].dataset.icon === flippedCards[1].dataset.icon) {
-                        matchedPairs++;
-                        givePraise();
-                        flippedCards = [];
-                        if (matchedPairs === 4) {
-                            setTimeout(() => {
-                                speakText("Selamat, Abror dan Arqom menyelesaikan permainan!");
-                                initMemoryGame();
-                            }, 1500);
-                        }
-                    } else {
-                        playWrongSFX();
-                        setTimeout(() => {
-                            flippedCards.forEach(c => {
-                                c.classList.remove('flipped');
-                                c.innerText = '❓';
-                            });
-                            flippedCards = [];
-                        }, 1000);
-                    }
-                }
-            }
-        }
-
-        window.onload = () => {
-            setTimeout(() => {
-                speakText("Selamat datang di game challenge Abror dan Arqom!");
-            }, 800);
-        };
-    </script>
+/* ============ MULAI ============ */
+welcome();
+</script>
 </body>
 </html>
