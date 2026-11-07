@@ -118,7 +118,7 @@ const MODS=[
  ['sebab','💡','Sebab & Akibat','c-yellow','Sebab-Akibat',modSebab],
  ['robot','🤖','Robot Cari Jalan','c-green','Algoritma',()=>modMaze('algo')],
  ['debug','🔧','Perbaiki Robot','c-red','Debugging',()=>modMaze('debug')],
- ['doa','🤲','Doa & Nasyid','c-indigo','Islami',()=>modDoa('doa')]
+ ['doa','🤲','Doa & Kisah','c-indigo','Islami',()=>modDoa('doa')]
 ];
 const menu=$('#menu');
 MODS.forEach(([id,ic,label,col,chip,fn])=>{
@@ -350,7 +350,7 @@ const DOA=[
  {ic:'🚗',judul:'Naik Kendaraan',ar:'سُبْحَانَ الَّذِي سَخَّرَ لَنَا هَذَا وَمَا كُنَّا لَهُ مُقْرِنِينَ وَإِنَّا إِلَى رَبِّنَا لَمُنْقَلِبُونَ',lat:'Subḥānal-ladzī sakhkhara lanā hādzā wa mā kunnā lahu muqrinīn, wa innā ilā rabbinā lamunqalibūn',arti:'Maha Suci Allah yang menundukkan kendaraan ini bagi kami, padahal kami tidak mampu menguasainya. Dan kepada Tuhan kami, kami akan kembali.',sumber:'HR. Muslim',audio:'audio/doa-naik-kendaraan.mp3',tts:'Subhaanal ladzi sakhkhara lana haadza wa maa kunna lahu muqrinin, wa inna ilaa rabbina lamunqalibuun'},
  {ic:'🤧',judul:'Saat Bersin',ar:'الْحَمْدُ لِلَّهِ',lat:'Alḥamdulillāh',arti:'Segala puji bagi Allah. Teman yang mendengar menjawab: Yarḥamukallāh (semoga Allah merahmatimu).',sumber:'HR. Bukhari',audio:'audio/doa-bersin.mp3',tts:'Alhamdulillah'}
 ];
-/* >>> BAGIAN 2: DAFTAR NASYID / MUROTTAL.
+/* >>> BAGIAN 2: DAFTAR KISAH ISLAMI & MUROTTAL (array KISAH).
    - tipe 'audio': file mp3 milik sendiri/berizin di folder /audio/
    - tipe 'yt'   : isi "id" dengan kode video YouTube (bagian setelah v= pada link). Pilih video nasyid tanpa musik / murottal anak,
                    dan pastikan video mengizinkan embed. Contoh: {tipe:'yt',judul:'Nasyid ...',id:'XXXXXXXXXXX'} */
@@ -358,7 +358,29 @@ const DOA=[
    Untuk API/server lain, ubah isi fungsi ini saja. */
 const QARI='ar.alafasy';
 const quranAudio=n=>`https://api.islamic.app/v1/audio/surah/${QARI}/${n}`;
-const NASYID=[
+/* Kisah Islami: audio dari archive.org (item TasjilatAlQashash). Tambah kisah lain cukup dengan menyalin satu baris
+   dan mengganti nama file (persis seperti di halaman archive.org, tanpa ekstensi .mp3). */
+const kisahAudio=f=>'https://archive.org/download/TasjilatAlQashash/'+encodeURIComponent(f)+'.mp3';
+const KISAH=[
+ {tipe:'audio',judul:'Tiga Orang di dalam Gua',src:kisahAudio('01.Tiga orang yg terperangkap dlm Goa')},
+ {tipe:'audio',judul:'Rasa Lapar Abu Hurairah',src:kisahAudio('06.Rasa lapar Abu Hurairah')},
+ {tipe:'audio',judul:'Setan Pencuri Zakat',src:kisahAudio('07.Syaitan pencuri Zakat')},
+ {tipe:'audio',judul:'Ujian bagi si Belang, si Botak & si Buta',src:kisahAudio('09.Ujian bagi sibelang, sibotak & sibuta')},
+ {tipe:'audio',judul:'Uwais bin Amir yang Bersahaja',src:kisahAudio('11.Uwais bin Amir yg bersahaja')},
+ {tipe:'audio',judul:'Petani & Awan',src:kisahAudio('12.Petani & Awan')},
+ {tipe:'audio',judul:'Al-Fatihah yang Menakjubkan',src:kisahAudio('15.Al-Fatihah yg menakjubkan')},
+ {tipe:'audio',judul:'Ibnu Umar yang Rendah Hati',src:kisahAudio('18,Ibnu Umar yg rendah hati')},
+ {tipe:'audio',judul:'Batu yang Membawa Lari Baju',src:kisahAudio('19.Batu yg membawa lari baju')},
+ {tipe:'audio',judul:'Ibu Sang Bayi yang Sebenarnya',src:kisahAudio('24.Ibu sang bayi yg sebenarnya')},
+ {tipe:'audio',judul:'Tembok Besi Dzulkarnain',src:kisahAudio('25.Tembok besi Dzulkarnain')},
+ {tipe:'audio',judul:'Onta Nabi Sholih',src:kisahAudio("27.Onta Nabi Sholih A'laihi Wasallam")},
+ {tipe:'audio',judul:'Ashabul Kahfi',src:kisahAudio('28.Ashabul Kahfi')},
+ {tipe:'audio',judul:'Penjual Tanah & Pembelinya',src:kisahAudio('30.Penjual tanah & Pembelinya')},
+ {tipe:'audio',judul:'Sang Anshar & Tamu yang Lapar',src:kisahAudio('31.Sang Anshor & Tamu yang lapar')},
+ {tipe:'audio',judul:'Abu Thalhah & Roti yang Diberkahi',src:kisahAudio('33.Abu Thalhah & Roti yang diberkahi')},
+ {tipe:'audio',judul:'Batang Kurma yang Menangis',src:kisahAudio('38.Sepotong Batang Korma yang menangis')},
+ {tipe:'audio',judul:'Nabi Sulaiman, Raja Jin & Manusia',src:kisahAudio('40.Nabi Sulaiman Raja Jin & Manusia')},
+ /* Murottal (boleh dihapus jika tidak diperlukan) */
  {tipe:'audio',judul:'Murottal Al-Fatihah',src:quranAudio(1)},
  {tipe:'audio',judul:'Murottal Al-Ikhlas',src:quranAudio(112)},
  {tipe:'audio',judul:'Murottal Al-Falaq',src:quranAudio(113)},
@@ -377,7 +399,7 @@ function playDoa(d){
   else speak(d.tts)})}
 function modDoa(mode='doa'){
  clearTimers();stopAudio();
- const top=tabs([['📿 Doa Harian',()=>modDoa('doa')],['🎬 Nasyid & Murottal',()=>modDoa('nasyid')]],mode==='nasyid'?1:0);
+ const top=tabs([['📿 Doa Harian',()=>modDoa('doa')],['📖 Kisah Islami',()=>modDoa('nasyid')]],mode==='nasyid'?1:0);
  if(mode==='doa'){
   const g=gridOf(2);g.style.maxWidth='560px';
   DOA.forEach(d=>{const c=card(d.ic+' '+d.judul,()=>doaDetail(d));c.style.fontSize='1.25rem';c.style.minHeight='84px';g.appendChild(c)});
@@ -401,9 +423,9 @@ function nasyidView(top){
   box.innerHTML=`<b>Khusus orang tua/guru</b><div class="note">Jawab soal ini untuk membuka video dan audio:</div><div class="big" style="color:#B45309;border-color:#F59E0B">${a} + ${b} = ?</div>`;
   const g=gridOf(4);[ans,ans+rnd(1,3),ans-rnd(1,3),ans+rnd(4,6)].filter((v,i,s)=>s.indexOf(v)===i).sort(()=>Math.random()-.5).forEach(v=>g.appendChild(card(v,e=>{if(v===ans){gateOk=true;modDoa('nasyid')}else{e.classList.add('bad');setTimeout(()=>e.classList.remove('bad'),400)}})));
   box.appendChild(g);mount(top,box);return}
- const els=[top,bubble('Nasyid tanpa musik & murottal')];
- const list=NASYID.filter(n=>n.tipe==='yt'?n.id:n.src);
- if(!list.length)els.push(el('div','note','Belum ada daftar. Tambahkan pada array NASYID di kode.'));
+ const els=[top,bubble('Dengarkan kisah islami!')];
+ const list=KISAH.filter(n=>n.tipe==='yt'?n.id:n.src);
+ if(!list.length)els.push(el('div','note','Belum ada daftar. Tambahkan pada array KISAH di kode.'));
  list.forEach(n=>{const m=document.createElement('div');m.className='media';m.appendChild(el('b','',(n.tipe==='yt'?'🎬 ':'🎧 ')+n.judul));
   if(n.tipe==='yt'){const f=document.createElement('iframe');f.src='https://www.youtube-nocookie.com/embed/'+encodeURIComponent(n.id)+'?rel=0&modestbranding=1&playsinline=1';f.title=n.judul;f.allow='encrypted-media; picture-in-picture; fullscreen';f.allowFullscreen=true;f.loading='lazy';f.style.cssText='width:100%;aspect-ratio:16/9;border:0;border-radius:14px;margin-top:8px';m.appendChild(f)}
   else{const a=document.createElement('audio');a.controls=true;a.preload='none';a.src=n.src;const msg=el('div','note','');a.onerror=()=>{msg.textContent='Audio belum bisa dimuat. Cek koneksi internet atau alamat audionya.'};a.onplay=()=>{stopAudio();document.querySelectorAll('.media audio').forEach(x=>{if(x!==a)x.pause()});speechSynthesis&&speechSynthesis.cancel()};m.append(a,msg)}
