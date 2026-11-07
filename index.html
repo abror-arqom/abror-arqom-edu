@@ -4,6 +4,13 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Game Edukasi Abror & Arqom</title>
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#0F172A">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Abror & Arqom">
+<link rel="icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-192.png">
 <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@700&family=Fredoka:wght@500;600;700&display=swap" rel="stylesheet">
 <style>
 :root{--red:#FF4757;--orange:#FF7F50;--yellow:#FFA502;--green:#2ED573;--blue:#1E90FF;--purple:#8E44AD;--dark:#0F172A;--ink:#1E293B}
@@ -135,7 +142,10 @@ function welcome(){
  const w=document.createElement('div');
  w.innerHTML='<h2 style="color:#2563EB;font-size:1.7rem;margin-bottom:8px">Pilih Permainan di Atas!</h2><p style="font-size:1.1rem;color:#475569;font-weight:600;margin-bottom:14px">Halo Abror &amp; Arqom, mari belajar dan bermain bersama!</p><div style="font-size:3.2rem;margin-bottom:10px">🚗 🧩 🌙 🔢 🎨 🧱 🤖</div>';
  w.appendChild(btn('🔊 Sapaan Abror & Arqom',()=>speak('Selamat datang di game edukasi Abror dan Arqom! Mari kita mulai bermain!'),'g'));
+ if(deferredInstall)w.appendChild(btn('📲 Pasang di Perangkat',async()=>{deferredInstall.prompt();await deferredInstall.userChoice;deferredInstall=null;welcome()},'p'));
  mount(w)}
+let deferredInstall=null;
+window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();deferredInstall=e;if(!activeId)welcome()});
 window.addEventListener('pointerdown',()=>{if(!greeted){greeted=true;if(ctx)ctx.resume()}},{once:true});
 
 /* ============ 1. HIJAIYYAH ============ */
@@ -431,6 +441,9 @@ function nasyidView(top){
   else{const a=document.createElement('audio');a.controls=true;a.preload='none';a.src=n.src;const msg=el('div','note','');a.onerror=()=>{msg.textContent='Audio belum bisa dimuat. Cek koneksi internet atau alamat audionya.'};a.onplay=()=>{stopAudio();document.querySelectorAll('.media audio').forEach(x=>{if(x!==a)x.pause()});speechSynthesis&&speechSynthesis.cancel()};m.append(a,msg)}
   els.push(m)});
  mount(...els)}
+
+/* ============ PWA (bisa dipasang & dibuka offline) ============ */
+if('serviceWorker' in navigator&&location.protocol!=='file:')window.addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}));
 
 /* ============ MULAI ============ */
 welcome();
